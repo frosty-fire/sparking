@@ -1,0 +1,13 @@
+server:
+  port: 8021
+  http2:
+    enabled: true
+
+infra:
+  database:
+    master:
+      url: jdbc:mysql://127.0.0.01:4000/user_profile?allowPublicKeyRetrieval=true&useSSL=false&useUnicode=yes&characterEncoding=UTF-8&serverTimezone=UTC
+      username: root
+      password: sparking
+      max-pool-size: 16
+

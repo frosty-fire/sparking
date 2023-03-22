@@ -1,0 +1,9 @@
+version: "3.9"
+
+services:
+  api-gateway:
+    container_name: "nginx"
+    network_mode: host
+    image: nginx:latest
+    volumes:
+      - ./gateway.conf:/etc/nginx/nginx.conf:ro
