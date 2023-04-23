@@ -35,8 +35,6 @@ public class LoginHandler implements FlowHandler {
           response.updateResponse(StatusEnum.USER_NOT_FOUND.getStatusCode());
         } else {
           UserModel user = userModels[0];
-          log.info(user.getPin());
-          log.info(payload.getPin());
           if (!Objects.equals(user.getPin(), payload.getPin())) {
             response.updateResponse(StatusEnum.LOGIN_FAILED.getStatusCode());
           } else {

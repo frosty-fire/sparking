@@ -15,6 +15,7 @@
     <module>sparking-parking-core</module>
     <module>sparking-database</module>
     <module>sparking-merchant-core</module>
+    <module>sparking-server</module>
   </modules>
 
   <properties>
