@@ -10,12 +10,13 @@
   <packaging>pom</packaging>
 
   <modules>
+    <module>sparking-server</module>
     <module>sparking-api-gateway</module>
     <module>sparking-user-management</module>
     <module>sparking-parking-core</module>
-    <module>sparking-database</module>
     <module>sparking-merchant-core</module>
-    <module>sparking-server</module>
+    <module>sparking-payment-core</module>
+    <module>sparking-database</module>
   </modules>
 
   <properties>

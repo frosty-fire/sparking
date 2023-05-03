@@ -12,7 +12,6 @@
   <artifactId>user-management</artifactId>
   <packaging>pom</packaging>
   <modules>
-    <module>user-profile</module>
     <module>authorization</module>
   </modules>
 
