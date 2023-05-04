@@ -11,7 +11,8 @@ public enum FlowEnum {
   SIGN_UP(4, "auth/sign-up"),
 
   // profile
-  GET_USER(5, "profile/get-user");
+  GET_USER(5, "profile/get-user"),
+  SET_NEW_PASSWORD(6, "profile/set-new-password");
   ;
 
   private final int value;

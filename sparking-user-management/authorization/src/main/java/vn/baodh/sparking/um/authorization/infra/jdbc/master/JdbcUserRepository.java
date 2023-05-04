@@ -56,8 +56,20 @@ public class JdbcUserRepository implements UserRepository {
   }
 
   @Override
-  public boolean update(UserModel entity) {
-    return false;
+  public boolean update(UserModel userModel) throws Exception {
+    var prep = """
+        update %s set pin = :pin where phone = :phone
+        """;
+    var params = new MapSqlParameterSource();
+    var entity = UserEntity.from(userModel);
+    var sql = String.format(prep, USER_TABLE);
+    params.addValue("phone", entity.getPhone());
+    params.addValue("pin", entity.getPin());
+    try {
+      return jdbcTemplate.update(sql, params) != 0;
+    } catch (Exception exception) {
+      throw new Exception("database exception: " + exception);
+    }
   }
 
   @Override

@@ -7,6 +7,7 @@ import vn.baodh.sparking.um.authorization.app.service.handler.CheckPhoneHandler;
 import vn.baodh.sparking.um.authorization.app.service.handler.DefaultHandler;
 import vn.baodh.sparking.um.authorization.app.service.handler.GetUserHandler;
 import vn.baodh.sparking.um.authorization.app.service.handler.LoginHandler;
+import vn.baodh.sparking.um.authorization.app.service.handler.SetNewPasswordHandler;
 import vn.baodh.sparking.um.authorization.app.service.handler.SignUpHandler;
 import vn.baodh.sparking.um.authorization.app.service.handler.VerifyPhoneHandler;
 import vn.baodh.sparking.um.authorization.domain.enumeration.FlowEnum;
@@ -26,6 +27,7 @@ public class FlowMapping {
 
   // profile
   private final GetUserHandler getUserHandler;
+  private final SetNewPasswordHandler setNewPasswordHandler;
 
   public FlowHandler getFlowHandler(FlowEnum flowEnum) {
     return switch (flowEnum) {
@@ -34,6 +36,7 @@ public class FlowMapping {
       case LOGIN -> loginHandler;
       case SIGN_UP -> signUpHandler;
       case GET_USER -> getUserHandler;
+      case SET_NEW_PASSWORD -> setNewPasswordHandler;
       default -> defaultHandler;
     };
   }

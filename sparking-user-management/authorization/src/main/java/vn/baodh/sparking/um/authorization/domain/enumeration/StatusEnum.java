@@ -10,6 +10,7 @@ public enum StatusEnum {
   USER_NOT_FOUND(-4, "Tài khoản không tồn tại"),
   WRONG_OTP(-5, "OTP không hợp lệ, mời nhập lại"),
   LOGIN_FAILED(-6, "Thông tin chưa đúng, mời nhập lại"),
+  WRONG_INFO(-7, "Thông tin chưa đúng, mời nhập lại"),
   ;
 
   private final int statusCode;
