@@ -34,7 +34,7 @@ public class DefaultHttpController {
   @PostMapping(value = "/**", consumes = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<?> handlePostInformation(@RequestBody BaseRequest request) {
     BaseResponse<?> response = new BaseResponse<>();
-    response.updateResponse(StatusEnum.SUCCESS.getStatusCode());
+    response.updateResponse(StatusEnum.UNKNOWN.getStatusCode());
     return ResponseEntity.status(HttpStatus.OK).body(response);
   }
 }

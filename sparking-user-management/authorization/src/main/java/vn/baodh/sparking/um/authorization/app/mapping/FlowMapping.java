@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import vn.baodh.sparking.um.authorization.app.service.FlowHandler;
 import vn.baodh.sparking.um.authorization.app.service.handler.CheckPhoneHandler;
 import vn.baodh.sparking.um.authorization.app.service.handler.DefaultHandler;
+import vn.baodh.sparking.um.authorization.app.service.handler.GetUserHandler;
 import vn.baodh.sparking.um.authorization.app.service.handler.LoginHandler;
 import vn.baodh.sparking.um.authorization.app.service.handler.SignUpHandler;
 import vn.baodh.sparking.um.authorization.app.service.handler.VerifyPhoneHandler;
@@ -23,12 +24,16 @@ public class FlowMapping {
   private final LoginHandler loginHandler;
   private final SignUpHandler signUpHandler;
 
+  // profile
+  private final GetUserHandler getUserHandler;
+
   public FlowHandler getFlowHandler(FlowEnum flowEnum) {
     return switch (flowEnum) {
       case CHECK_PHONE -> checkPhoneHandler;
       case VERIFY_PHONE -> verifyPhoneHandler;
       case LOGIN -> loginHandler;
       case SIGN_UP -> signUpHandler;
+      case GET_USER -> getUserHandler;
       default -> defaultHandler;
     };
   }

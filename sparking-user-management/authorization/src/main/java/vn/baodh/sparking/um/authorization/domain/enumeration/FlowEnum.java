@@ -5,10 +5,13 @@ public enum FlowEnum {
   UNKNOWN(0, "unknown"),
 
   // auth
-  CHECK_PHONE(1, "check-phone"),
-  VERIFY_PHONE(2, "verify-phone"),
-  LOGIN(3, "login"),
-  SIGN_UP(4, "sign-up"),
+  CHECK_PHONE(1, "auth/check-phone"),
+  VERIFY_PHONE(2, "auth/verify-phone"),
+  LOGIN(3, "auth/login"),
+  SIGN_UP(4, "auth/sign-up"),
+
+  // profile
+  GET_USER(5, "profile/get-user");
   ;
 
   private final int value;

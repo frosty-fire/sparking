@@ -23,30 +23,20 @@ import vn.baodh.sparking.um.authorization.domain.model.BaseResponse;
 
 @Slf4j
 @RestController
-@RequestMapping("/um/user")
+@RequestMapping("/um")
 @RequiredArgsConstructor
-public class UserAuthHttpController {
+public class UserHttpController {
 
   private final FlowMapping flowMapping;
 
-  @GetMapping("/auth/**")
+  @GetMapping("/user/**")
   public ResponseEntity<?> handleGetAuthentication(
-      HttpServletRequest request,
+      HttpServletRequest uri,
       @RequestParam Map<String, String> params
   ) {
     BaseResponse<?> response = new BaseResponse<>();
     try {
-      String url = request.getRequestURI();
-      String[] comps = url.split("/");
-      StringBuilder methodName;
-      if (comps.length < 5) {
-        methodName = new StringBuilder(FlowEnum.UNKNOWN.getFlowName());
-      } else {
-        methodName = new StringBuilder(comps[4]);
-        for (int i = 5; i < comps.length; i++) {
-          methodName.append("/").append(comps[i]);
-        }
-      }
+      String methodName = getMethodName(uri);
       BaseRequestInfo<String> baseRequestInfo
           = new BaseRequestInfo<>(methodName.toString(), params);
       FlowEnum flowEnum = FlowEnum.getFlowEnum(methodName.toString());
@@ -60,17 +50,20 @@ public class UserAuthHttpController {
       response.updateResponse(StatusEnum.EXCEPTION.getStatusCode());
       log.error(
           "[UserAuthHttpController] handleGetAuthentication exception with request: {}, response: {}, ",
-          request, response, exception);
+          uri, response, exception);
       return ResponseEntity.status(HttpStatus.OK).body(response);
     }
   }
 
 
-  @PostMapping(value = "/auth", consumes = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<?> handlePostAuthentication(@RequestBody BaseRequest request) {
+  @PostMapping(value = "/user/**", consumes = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<?> handlePostAuthentication(
+      HttpServletRequest uri,
+      @RequestBody BaseRequest request) {
     BaseResponse<?> response = new BaseResponse<>();
     try {
-      String methodName = request.getMethod();
+      String methodName = getMethodName(uri);
+      methodName = methodName + "/" + request.getMethod();
       BaseRequestInfo<String> baseRequestInfo = new BaseRequestInfo<>(
           request.getMethod(),
           request.getParams());
@@ -88,5 +81,20 @@ public class UserAuthHttpController {
           request, response, exception);
       return ResponseEntity.status(HttpStatus.OK).body(response);
     }
+  }
+
+  private String getMethodName(HttpServletRequest uri) {
+    String url = uri.getRequestURI();
+    String[] comps = url.split("/");
+    StringBuilder methodName;
+    if (comps.length < 4) {
+      methodName = new StringBuilder(FlowEnum.UNKNOWN.getFlowName());
+    } else {
+      methodName = new StringBuilder(comps[3]);
+      for (int i = 4; i < comps.length; i++) {
+        methodName.append("/").append(comps[i]);
+      }
+    }
+    return methodName.toString();
   }
 }
