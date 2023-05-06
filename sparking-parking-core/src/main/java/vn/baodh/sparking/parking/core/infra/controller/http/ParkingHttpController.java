@@ -25,9 +25,11 @@ import vn.baodh.sparking.parking.core.domain.model.BaseResponse;
 @RestController
 @RequestMapping("/prc")
 @RequiredArgsConstructor
-public class QRParkingHttpController {
+public class ParkingHttpController {
 
   private final FlowMapping flowMapping;
+
+  @PostMapping("/")
 
   @GetMapping("/gen-qr/**")
   ResponseEntity<?> handleGetGenerateQr(

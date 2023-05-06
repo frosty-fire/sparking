@@ -1,4 +1,4 @@
-package vn.baodh.sparking.um.authorization.domain.model;
+package vn.baodh.sparking.um.authorization.domain.model.base;
 
 import java.util.Map;
 import lombok.Data;

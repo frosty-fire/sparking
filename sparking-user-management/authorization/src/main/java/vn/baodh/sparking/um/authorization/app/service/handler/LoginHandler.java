@@ -4,11 +4,10 @@ import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import vn.baodh.sparking.um.authorization.app.security.JwtTokenProvider;
 import vn.baodh.sparking.um.authorization.app.service.FlowHandler;
 import vn.baodh.sparking.um.authorization.domain.enumeration.StatusEnum;
-import vn.baodh.sparking.um.authorization.domain.model.BaseRequestInfo;
-import vn.baodh.sparking.um.authorization.domain.model.BaseResponse;
+import vn.baodh.sparking.um.authorization.domain.model.base.BaseRequestInfo;
+import vn.baodh.sparking.um.authorization.domain.model.base.BaseResponse;
 import vn.baodh.sparking.um.authorization.domain.model.TokenModel;
 import vn.baodh.sparking.um.authorization.domain.model.UserModel;
 import vn.baodh.sparking.um.authorization.domain.model.payload.LoginPayLoad;
@@ -20,7 +19,8 @@ import vn.baodh.sparking.um.authorization.infra.jdbc.master.JdbcUserRepository;
 public class LoginHandler implements FlowHandler {
 
   private final JdbcUserRepository userRepository;
-  private final JwtTokenProvider tokenProvider;
+  // TODO
+//  private final JwtTokenProvider tokenProvider;
 
   @Override
   public BaseResponse<?> handle(BaseRequestInfo<?> baseRequestInfo) {

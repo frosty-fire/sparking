@@ -1,15 +1,14 @@
 package vn.baodh.sparking.um.authorization.app.service.handler;
 
 import java.util.Base64;
-import java.util.Date;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import vn.baodh.sparking.um.authorization.app.service.FlowHandler;
 import vn.baodh.sparking.um.authorization.domain.enumeration.StatusEnum;
-import vn.baodh.sparking.um.authorization.domain.model.BaseRequestInfo;
-import vn.baodh.sparking.um.authorization.domain.model.BaseResponse;
+import vn.baodh.sparking.um.authorization.domain.model.base.BaseRequestInfo;
+import vn.baodh.sparking.um.authorization.domain.model.base.BaseResponse;
 import vn.baodh.sparking.um.authorization.domain.model.TokenModel;
 import vn.baodh.sparking.um.authorization.domain.model.UserModel;
 import vn.baodh.sparking.um.authorization.domain.model.payload.VerifyPhonePayLoad;
@@ -30,7 +29,7 @@ public class VerifyPhoneHandler implements FlowHandler {
       VerifyPhonePayLoad payload = new VerifyPhonePayLoad().getPayLoadInfo(
           baseRequestInfo.getParams());
       if (payload.validatePayload()) {
-        String token = "sparking-public-key" + new Date();
+        String token = payload.getPhone();
         UserModel[] userModels = userRepository.getUserByPhone(payload.getPhone(), true)
             .toArray(new UserModel[0]);
         if (userModels.length == 0) {
@@ -43,7 +42,6 @@ public class VerifyPhoneHandler implements FlowHandler {
         } else {
           // TODO: check is new
           UserModel user = userModels[0];
-//          System.out.println(tokenProvider.generateToken(user));
           response.data = new TokenModel[]{
               new TokenModel().setNeedOtp(false).setAccessToken(
                   Base64.getEncoder().encodeToString(token.getBytes()))

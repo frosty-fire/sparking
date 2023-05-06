@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import vn.baodh.sparking.um.authorization.domain.enumeration.StatusEnum;
-import vn.baodh.sparking.um.authorization.domain.model.BaseRequest;
-import vn.baodh.sparking.um.authorization.domain.model.BaseResponse;
+import vn.baodh.sparking.um.authorization.domain.model.base.BaseRequest;
+import vn.baodh.sparking.um.authorization.domain.model.base.BaseResponse;
 
 @RestController
 @RequestMapping("/um")

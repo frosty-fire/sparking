@@ -4,12 +4,11 @@ import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Component;
 import vn.baodh.sparking.um.authorization.app.service.FlowHandler;
 import vn.baodh.sparking.um.authorization.domain.enumeration.StatusEnum;
-import vn.baodh.sparking.um.authorization.domain.model.BaseRequestInfo;
-import vn.baodh.sparking.um.authorization.domain.model.BaseResponse;
+import vn.baodh.sparking.um.authorization.domain.model.base.BaseRequestInfo;
+import vn.baodh.sparking.um.authorization.domain.model.base.BaseResponse;
 import vn.baodh.sparking.um.authorization.domain.model.UserModel;
 import vn.baodh.sparking.um.authorization.domain.model.payload.SetNewPasswordPayload;
 import vn.baodh.sparking.um.authorization.domain.repository.UserRepository;
@@ -28,8 +27,8 @@ public class SetNewPasswordHandler implements FlowHandler {
       SetNewPasswordPayload payload = new SetNewPasswordPayload().getPayLoadInfo(
           baseRequestInfo.getParams());
       if (payload.validatePayload()) {
+        List<UserModel> users = userRepository.getUserByPhone(payload.getPhone(), false);
         if (Objects.equals(payload.getIsRequireOld(), "true")) {
-          List<UserModel> users = userRepository.getUserByPhone(payload.getPhone(), false);
           if (users.size() > 0 && Objects.equals(users.get(0).getPin(), payload.getOldPin())) {
             if (userRepository.update(
                 new UserModel()
@@ -44,7 +43,6 @@ public class SetNewPasswordHandler implements FlowHandler {
             response.updateResponse(StatusEnum.WRONG_INFO.getStatusCode());
           }
         } else {
-          List<UserModel> users = userRepository.getUserByPhone(payload.getPhone(), false);
           if (users.size() > 0) {
             if (userRepository.update(
                 new UserModel()
@@ -63,11 +61,6 @@ public class SetNewPasswordHandler implements FlowHandler {
         response.updateResponse(StatusEnum.INVALID_PARAMETER.getStatusCode());
       }
       log.info("[SetNewPasswordHandler] Finish handle set new password requestPhone: {}, response: {}",
-          baseRequestInfo.getParam("phone"), response);
-      return response;
-    } catch (DuplicateKeyException exception) {
-      response.updateResponse(StatusEnum.DUPLICATE_PHONE.getStatusCode());
-      log.info("[SetNewPasswordHandler] Handler handle >duplicate key< with requestPhone: {}, response: {}",
           baseRequestInfo.getParam("phone"), response);
       return response;
     } catch (Exception exception) {

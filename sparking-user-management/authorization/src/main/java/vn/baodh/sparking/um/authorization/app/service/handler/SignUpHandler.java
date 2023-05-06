@@ -2,16 +2,14 @@ package vn.baodh.sparking.um.authorization.app.service.handler;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
-import java.util.TimeZone;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Component;
 import vn.baodh.sparking.um.authorization.app.service.FlowHandler;
 import vn.baodh.sparking.um.authorization.domain.enumeration.StatusEnum;
-import vn.baodh.sparking.um.authorization.domain.model.BaseRequestInfo;
-import vn.baodh.sparking.um.authorization.domain.model.BaseResponse;
+import vn.baodh.sparking.um.authorization.domain.model.base.BaseRequestInfo;
+import vn.baodh.sparking.um.authorization.domain.model.base.BaseResponse;
 import vn.baodh.sparking.um.authorization.domain.model.UserModel;
 import vn.baodh.sparking.um.authorization.domain.model.payload.SignUpPayload;
 import vn.baodh.sparking.um.authorization.infra.jdbc.master.JdbcUserRepository;

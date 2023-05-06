@@ -13,8 +13,6 @@ public class GsonUtil {
 
   private static final Gson gson;
   private static final Gson gsonSnakeCase;
-//  private static final JsonFormat.Printer printer = JsonFormat.printer()
-//      .omittingInsignificantWhitespace().preservingProtoFieldNames();
 
   static {
     GsonBuilder gsonBuilder = new GsonBuilder();
@@ -57,14 +55,6 @@ public class GsonUtil {
   public static String toJsonStringSnakeCase(Object object) {
     return gsonSnakeCase.toJson(object);
   }
-
-//  public static String protobufToJson(MessageOrBuilder message) {
-//    try {
-//      return printer.print(message);
-//    } catch (InvalidProtocolBufferException e) {
-//      return null;
-//    }
-//  }
 
   public static <T> T fromJsonSnakeCase(String jsonStringSnakeCase, Class<T> clazz) {
     return gsonSnakeCase.fromJson(jsonStringSnakeCase, clazz);

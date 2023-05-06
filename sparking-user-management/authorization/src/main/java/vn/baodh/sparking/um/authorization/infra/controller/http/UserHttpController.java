@@ -14,12 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import vn.baodh.sparking.um.authorization.app.mapping.FlowMapping;
+import vn.baodh.sparking.um.authorization.app.security.JwtTokenChecker;
 import vn.baodh.sparking.um.authorization.app.service.FlowHandler;
 import vn.baodh.sparking.um.authorization.domain.enumeration.FlowEnum;
 import vn.baodh.sparking.um.authorization.domain.enumeration.StatusEnum;
-import vn.baodh.sparking.um.authorization.domain.model.BaseRequest;
-import vn.baodh.sparking.um.authorization.domain.model.BaseRequestInfo;
-import vn.baodh.sparking.um.authorization.domain.model.BaseResponse;
+import vn.baodh.sparking.um.authorization.domain.model.base.BaseRequest;
+import vn.baodh.sparking.um.authorization.domain.model.base.BaseRequestInfo;
+import vn.baodh.sparking.um.authorization.domain.model.base.BaseResponse;
 
 @Slf4j
 @RestController
@@ -28,6 +29,24 @@ import vn.baodh.sparking.um.authorization.domain.model.BaseResponse;
 public class UserHttpController {
 
   private final FlowMapping flowMapping;
+  private final JwtTokenChecker jwtTokenChecker;
+
+  @PostMapping(value = "/user/get-friends", consumes = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<?> api1(
+      HttpServletRequest uri,
+      @RequestBody BaseRequest request) {
+    BaseResponse<?> response = new BaseResponse<>();
+    try {
+      log.info("get");
+      String phone = jwtTokenChecker.checkAndGetPhone(uri);
+      if (phone != null) {
+
+      }
+    } catch (Exception ignored) {
+      log.info("error");
+    }
+    return ResponseEntity.status(HttpStatus.OK).body(response);
+  }
 
   @GetMapping("/user/**")
   public ResponseEntity<?> handleGetAuthentication(

@@ -1,4 +1,4 @@
-package vn.baodh.sparking.um.authorization.domain.model;
+package vn.baodh.sparking.um.authorization.domain.model.base;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
