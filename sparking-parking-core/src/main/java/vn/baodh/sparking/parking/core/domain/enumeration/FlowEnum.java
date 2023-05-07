@@ -4,9 +4,13 @@ public enum FlowEnum {
   // default
   UNKNOWN(0, "unknown"),
 
-  // auth
-  CHECK_IN(1, "check-in"),
-  CHECK_OUT(2, "check-out"),
+  // qr
+  CHECK_IN(1, "gen-qr/check-in"),
+  CHECK_OUT(2, "gen-qr/check-out"),
+
+  // parking
+  GET_VEHICLE(3, "parking/get-vehicle"),
+  GET_VEHICLES(4, "parking/get-vehicles")
   ;
 
   private final int value;

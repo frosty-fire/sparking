@@ -1,4 +1,4 @@
-package vn.baodh.sparking.parking.core.domain.model.payload;
+package vn.baodh.sparking.parking.core.domain.model;
 
 import java.util.Map;
 

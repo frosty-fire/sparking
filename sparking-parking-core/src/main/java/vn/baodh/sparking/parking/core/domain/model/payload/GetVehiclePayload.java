@@ -2,20 +2,20 @@ package vn.baodh.sparking.parking.core.domain.model.payload;
 
 import java.util.Map;
 import lombok.Data;
+import vn.baodh.sparking.parking.core.domain.model.PayLoad;
 
 @Data
-public class LoginPayLoad implements PayLoad {
+public class GetVehiclePayload implements PayLoad {
+
   private String phone;
-  private String pin;
 
   private String deviceId;
   private String deviceModel;
   private String appVersion;
 
-  public LoginPayLoad getPayLoadInfo(Map<String, ?> params) {
-    LoginPayLoad payload = new LoginPayLoad();
+  public GetVehiclePayload getPayLoadInfo(Map<String, ?> params) {
+    GetVehiclePayload payload = new GetVehiclePayload();
     payload.setPhone((String) params.get("phone"));
-    payload.setPin((String) params.get("pin"));
 
     payload.setDeviceId((String) params.get("device_id"));
     payload.setDeviceModel((String) params.get("device_model"));
@@ -23,9 +23,8 @@ public class LoginPayLoad implements PayLoad {
     return payload;
   }
 
-  // TODO: need update
+  // TODO
   public boolean validatePayload() {
-    return this.getPhone().matches("^\\d{1,20}$")
-        && this.getPin().matches("^\\d{6}$");
+    return this.getPhone() != null && this.getPhone().matches("^\\d{1,20}$");
   }
 }

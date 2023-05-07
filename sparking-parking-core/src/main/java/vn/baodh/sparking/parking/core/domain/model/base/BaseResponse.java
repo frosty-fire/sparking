@@ -1,4 +1,4 @@
-package vn.baodh.sparking.parking.core.domain.model;
+package vn.baodh.sparking.parking.core.domain.model.base;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

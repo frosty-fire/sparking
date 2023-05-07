@@ -1,7 +1,7 @@
 package vn.baodh.sparking.parking.core.app.service;
 
-import vn.baodh.sparking.parking.core.domain.model.BaseRequestInfo;
-import vn.baodh.sparking.parking.core.domain.model.BaseResponse;
+import vn.baodh.sparking.parking.core.domain.model.base.BaseRequestInfo;
+import vn.baodh.sparking.parking.core.domain.model.base.BaseResponse;
 
 public interface FlowHandler {
 

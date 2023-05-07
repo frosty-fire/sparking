@@ -1,4 +1,4 @@
-package vn.baodh.sparking.parking.core.domain.model;
+package vn.baodh.sparking.parking.core.domain.model.base;
 
 import java.util.HashMap;
 import java.util.Iterator;

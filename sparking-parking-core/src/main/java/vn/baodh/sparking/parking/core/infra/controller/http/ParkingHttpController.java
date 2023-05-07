@@ -17,9 +17,9 @@ import vn.baodh.sparking.parking.core.app.mapping.FlowMapping;
 import vn.baodh.sparking.parking.core.app.service.FlowHandler;
 import vn.baodh.sparking.parking.core.domain.enumeration.FlowEnum;
 import vn.baodh.sparking.parking.core.domain.enumeration.StatusEnum;
-import vn.baodh.sparking.parking.core.domain.model.BaseRequest;
-import vn.baodh.sparking.parking.core.domain.model.BaseRequestInfo;
-import vn.baodh.sparking.parking.core.domain.model.BaseResponse;
+import vn.baodh.sparking.parking.core.domain.model.base.BaseRequest;
+import vn.baodh.sparking.parking.core.domain.model.base.BaseRequestInfo;
+import vn.baodh.sparking.parking.core.domain.model.base.BaseResponse;
 
 @Slf4j
 @RestController
@@ -29,49 +29,45 @@ public class ParkingHttpController {
 
   private final FlowMapping flowMapping;
 
-  @PostMapping("/")
+  @GetMapping("/ping")
+  public ResponseEntity<?> ping() {
+    return ResponseEntity.ok("pong");
+  }
 
-  @GetMapping("/gen-qr/**")
-  ResponseEntity<?> handleGetGenerateQr(
-      HttpServletRequest request,
+  @GetMapping("/**")
+  public ResponseEntity<?> handleGet(
+      HttpServletRequest uri,
       @RequestParam Map<String, String> params
   ) {
     BaseResponse<?> response = new BaseResponse<>();
     try {
-      String url = request.getRequestURI();
-      String[] comps = url.split("/");
-      StringBuilder methodName;
-      if (comps.length < 4) {
-        methodName = new StringBuilder(FlowEnum.UNKNOWN.getFlowName());
-      } else {
-        methodName = new StringBuilder(comps[3]);
-        for (int i = 4; i < comps.length; i++) {
-          methodName.append("/").append(comps[i]);
-        }
-      }
+      String methodName = getMethodName(uri);
       BaseRequestInfo<String> baseRequestInfo
-          = new BaseRequestInfo<>(methodName.toString(), params);
-      FlowEnum flowEnum = FlowEnum.getFlowEnum(methodName.toString());
+          = new BaseRequestInfo<>(methodName, params);
+      FlowEnum flowEnum = FlowEnum.getFlowEnum(methodName);
       FlowHandler flowHandler = flowMapping.getFlowHandler(flowEnum);
       response = flowHandler.handle(baseRequestInfo);
       log.info(
-          "[QRParkingHttpController] Finish handleGetGenerateQr with request: {}, response: {}",
-          params, response);
+          "[{}] Finish handlePost with request: {}, response: {}",
+          this.getClass().getSimpleName(), params, response);
       return ResponseEntity.status(HttpStatus.OK).body(response);
     } catch (Exception exception) {
       response.updateResponse(StatusEnum.EXCEPTION.getStatusCode());
       log.error(
-          "[QRParkingHttpController] handleGetGenerateQr exception with request: {}, response: {}, ",
-          request, response, exception);
+          "[{}] Finish handlePost with request: {}, response: {}",
+          this.getClass().getSimpleName(), uri, response, exception);
       return ResponseEntity.status(HttpStatus.OK).body(response);
     }
   }
 
-  @PostMapping(value = "/gen-qr", consumes = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<?> handlePostGenerateQr(@RequestBody BaseRequest request) {
+  @PostMapping(value = "/**", consumes = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<?> handlePost(
+      HttpServletRequest uri,
+      @RequestBody BaseRequest request) {
     BaseResponse<?> response = new BaseResponse<>();
     try {
-      String methodName = request.getMethod();
+      String methodName = getMethodName(uri);
+      methodName = methodName + "/" + request.getMethod();
       BaseRequestInfo<String> baseRequestInfo = new BaseRequestInfo<>(
           request.getMethod(),
           request.getParams());
@@ -79,15 +75,30 @@ public class ParkingHttpController {
       FlowHandler flowHandler = flowMapping.getFlowHandler(flowEnum);
       response = flowHandler.handle(baseRequestInfo);
       log.info(
-          "[QRParkingHttpController] Finish handlePostGenerateQr with request: {}, response: {}",
-          request, response);
+          "[{}] Finish handlePost with request: {}, response: {}",
+          this.getClass().getSimpleName(), request, response);
       return ResponseEntity.status(HttpStatus.OK).body(response);
     } catch (Exception exception) {
       response.updateResponse(StatusEnum.EXCEPTION.getStatusCode());
       log.error(
-          "[QRParkingHttpController] handlePostGenerateQr exception with request: {}, response: {}, ",
-          request, response, exception);
+          "[{}] handlePost exception with request: {}, response: {}, ",
+          this.getClass().getSimpleName(), request, response, exception);
       return ResponseEntity.status(HttpStatus.OK).body(response);
     }
+  }
+
+  private String getMethodName(HttpServletRequest uri) {
+    String url = uri.getRequestURI();
+    String[] comps = url.split("/");
+    StringBuilder methodName;
+    if (comps.length < 3) {
+      methodName = new StringBuilder(FlowEnum.UNKNOWN.getFlowName());
+    } else {
+      methodName = new StringBuilder(comps[2]);
+      for (int i = 3; i < comps.length; i++) {
+        methodName.append("/").append(comps[i]);
+      }
+    }
+    return methodName.toString();
   }
 }

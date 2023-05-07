@@ -1,6 +1,5 @@
 package vn.baodh.sparking.parking.core.app.service.handler;
 
-import java.sql.Timestamp;
 import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
@@ -9,8 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import vn.baodh.sparking.parking.core.app.service.FlowHandler;
 import vn.baodh.sparking.parking.core.domain.enumeration.StatusEnum;
-import vn.baodh.sparking.parking.core.domain.model.BaseRequestInfo;
-import vn.baodh.sparking.parking.core.domain.model.BaseResponse;
+import vn.baodh.sparking.parking.core.domain.model.base.BaseRequestInfo;
+import vn.baodh.sparking.parking.core.domain.model.base.BaseResponse;
 import vn.baodh.sparking.parking.core.domain.model.TokenModel;
 
 @Slf4j
@@ -31,12 +30,15 @@ public class CheckOutHandler implements FlowHandler {
               .setExpiredTime(String.valueOf(calendar.getTimeInMillis()))
       };
       response.updateResponse(StatusEnum.SUCCESS.getStatusCode());
+      log.info(
+          "[CheckOutHandler] Finish handle with request: {}, response: {}, ",
+          baseRequestInfo, response);
       return response;
     } catch (Exception exception) {
       response.updateResponse(StatusEnum.EXCEPTION.getStatusCode());
       log.error(
-          "[CheckOutHandler] Handler handle >exception< with requestPhone: {}, response: {}, ",
-          baseRequestInfo.getParam("phone"), response, exception);
+          "[CheckOutHandler] Handler handle >exception< with request: {}, response: {}, ",
+          baseRequestInfo, response, exception);
       return response;
     }
   }
