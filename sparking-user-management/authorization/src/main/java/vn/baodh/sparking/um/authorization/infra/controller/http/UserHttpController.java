@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import vn.baodh.sparking.um.authorization.app.mapping.FlowMapping;
-import vn.baodh.sparking.um.authorization.app.security.JwtTokenChecker;
 import vn.baodh.sparking.um.authorization.app.service.FlowHandler;
 import vn.baodh.sparking.um.authorization.domain.enumeration.FlowEnum;
 import vn.baodh.sparking.um.authorization.domain.enumeration.StatusEnum;
@@ -29,27 +28,14 @@ import vn.baodh.sparking.um.authorization.domain.model.base.BaseResponse;
 public class UserHttpController {
 
   private final FlowMapping flowMapping;
-  private final JwtTokenChecker jwtTokenChecker;
 
-  @PostMapping(value = "/user/get-friends", consumes = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<?> api1(
-      HttpServletRequest uri,
-      @RequestBody BaseRequest request) {
-    BaseResponse<?> response = new BaseResponse<>();
-    try {
-      log.info("get");
-      String phone = jwtTokenChecker.checkAndGetPhone(uri);
-      if (phone != null) {
-
-      }
-    } catch (Exception ignored) {
-      log.info("error");
-    }
-    return ResponseEntity.status(HttpStatus.OK).body(response);
+  @GetMapping("/ping")
+  public ResponseEntity<?> ping() {
+    return ResponseEntity.ok("pong");
   }
 
-  @GetMapping("/user/**")
-  public ResponseEntity<?> handleGetAuthentication(
+  @GetMapping("/**")
+  public ResponseEntity<?> handleGet(
       HttpServletRequest uri,
       @RequestParam Map<String, String> params
   ) {
@@ -57,26 +43,25 @@ public class UserHttpController {
     try {
       String methodName = getMethodName(uri);
       BaseRequestInfo<String> baseRequestInfo
-          = new BaseRequestInfo<>(methodName.toString(), params);
-      FlowEnum flowEnum = FlowEnum.getFlowEnum(methodName.toString());
+          = new BaseRequestInfo<>(methodName, params);
+      FlowEnum flowEnum = FlowEnum.getFlowEnum(methodName);
       FlowHandler flowHandler = flowMapping.getFlowHandler(flowEnum);
       response = flowHandler.handle(baseRequestInfo);
       log.info(
-          "[UserAuthHttpController] Finish handleGetAuthentication with request: {}, response: {}",
-          params, response);
+          "[{}] Finish handlePost with request: {}, response: {}",
+          this.getClass().getSimpleName(), params, response);
       return ResponseEntity.status(HttpStatus.OK).body(response);
     } catch (Exception exception) {
       response.updateResponse(StatusEnum.EXCEPTION.getStatusCode());
       log.error(
-          "[UserAuthHttpController] handleGetAuthentication exception with request: {}, response: {}, ",
-          uri, response, exception);
+          "[{}] Finish handlePost with request: {}, response: {}",
+          this.getClass().getSimpleName(), uri, response, exception);
       return ResponseEntity.status(HttpStatus.OK).body(response);
     }
   }
 
-
-  @PostMapping(value = "/user/**", consumes = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<?> handlePostAuthentication(
+  @PostMapping(value = "/**", consumes = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<?> handlePost(
       HttpServletRequest uri,
       @RequestBody BaseRequest request) {
     BaseResponse<?> response = new BaseResponse<>();
@@ -90,14 +75,14 @@ public class UserHttpController {
       FlowHandler flowHandler = flowMapping.getFlowHandler(flowEnum);
       response = flowHandler.handle(baseRequestInfo);
       log.info(
-          "[UserAuthHttpController] Finish handlePostAuthentication with request: {}, response: {}",
-          request, response);
+          "[{}] Finish handlePost with request: {}, response: {}",
+          this.getClass().getSimpleName(), request, response);
       return ResponseEntity.status(HttpStatus.OK).body(response);
     } catch (Exception exception) {
       response.updateResponse(StatusEnum.EXCEPTION.getStatusCode());
       log.error(
-          "[UserAuthHttpController] handlePostAuthentication exception with request: {}, response: {}, ",
-          request, response, exception);
+          "[{}] handlePost exception with request: {}, response: {}, ",
+          this.getClass().getSimpleName(), request, response, exception);
       return ResponseEntity.status(HttpStatus.OK).body(response);
     }
   }
@@ -106,11 +91,11 @@ public class UserHttpController {
     String url = uri.getRequestURI();
     String[] comps = url.split("/");
     StringBuilder methodName;
-    if (comps.length < 4) {
+    if (comps.length < 3) {
       methodName = new StringBuilder(FlowEnum.UNKNOWN.getFlowName());
     } else {
-      methodName = new StringBuilder(comps[3]);
-      for (int i = 4; i < comps.length; i++) {
+      methodName = new StringBuilder(comps[2]);
+      for (int i = 3; i < comps.length; i++) {
         methodName.append("/").append(comps[i]);
       }
     }

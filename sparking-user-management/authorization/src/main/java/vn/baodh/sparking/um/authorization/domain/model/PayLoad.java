@@ -1,4 +1,4 @@
-package vn.baodh.sparking.um.authorization.domain.model.payload;
+package vn.baodh.sparking.um.authorization.domain.model;
 
 import java.util.Map;
 

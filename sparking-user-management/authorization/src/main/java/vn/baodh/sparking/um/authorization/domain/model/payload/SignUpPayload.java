@@ -2,9 +2,10 @@ package vn.baodh.sparking.um.authorization.domain.model.payload;
 
 import java.util.Map;
 import lombok.Data;
+import vn.baodh.sparking.um.authorization.domain.model.PayLoad;
 
 @Data
-public class SignUpPayload implements PayLoad{
+public class SignUpPayload implements PayLoad {
   private String phone;
   private String pin;
   private String fullName;

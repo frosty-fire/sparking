@@ -28,8 +28,6 @@ public class FlowMapping {
   // profile
   private final GetUserHandler getUserHandler;
   private final SetNewPasswordHandler setNewPasswordHandler;
-  // TODO
-//  private final GetFriends getFriends;
 
   public FlowHandler getFlowHandler(FlowEnum flowEnum) {
     return switch (flowEnum) {
@@ -39,7 +37,6 @@ public class FlowMapping {
       case SIGN_UP -> signUpHandler;
       case GET_USER -> getUserHandler;
       case SET_NEW_PASSWORD -> setNewPasswordHandler;
-//      case GET_FIRIENDS -> getFriends
       default -> defaultHandler;
     };
   }

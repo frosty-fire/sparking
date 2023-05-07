@@ -1,7 +1,5 @@
 package vn.baodh.sparking.um.authorization.infra.jdbc.master;
 
-import java.sql.Date;
-import java.time.LocalDate;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -44,7 +42,6 @@ public class JdbcUserRepository implements UserRepository {
     params.addValue("cic", entity.getCic());
     params.addValue("image_url", entity.getImageUrl());
     params.addValue("app_config", entity.getAppConfig());
-//    params.addValue("created_at", )
     try {
       jdbcTemplate.update(sql, params);
       return userModel;

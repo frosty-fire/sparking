@@ -5,8 +5,9 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class BaseRequestInfo<T> extends BaseEntity {
-  private String methodName;
+
   private final Map<String, T> params;
+  private String methodName;
 
   public BaseRequestInfo(Map<String, T> params) {
     this.params = params;
@@ -24,7 +25,7 @@ public class BaseRequestInfo<T> extends BaseEntity {
     } else {
       String result;
       if (value instanceof String) {
-        result = (String)value;
+        result = (String) value;
       } else {
         result = ((String[]) value)[0];
       }
@@ -49,8 +50,8 @@ public class BaseRequestInfo<T> extends BaseEntity {
     Map<String, String> p = new HashMap();
     Iterator var2 = this.params.entrySet().iterator();
 
-    while(var2.hasNext()) {
-      Map.Entry<String, T> entry = (Map.Entry)var2.next();
+    while (var2.hasNext()) {
+      Map.Entry<String, T> entry = (Map.Entry) var2.next();
       p.put(entry.getKey(), this.getParam(entry.getKey()));
     }
 

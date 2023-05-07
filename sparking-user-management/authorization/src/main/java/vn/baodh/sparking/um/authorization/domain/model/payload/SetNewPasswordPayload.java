@@ -3,9 +3,10 @@ package vn.baodh.sparking.um.authorization.domain.model.payload;
 import java.util.Map;
 import java.util.Objects;
 import lombok.Data;
+import vn.baodh.sparking.um.authorization.domain.model.PayLoad;
 
 @Data
-public class SetNewPasswordPayload implements PayLoad{
+public class SetNewPasswordPayload implements PayLoad {
   private String phone;
   private String isRequireOld;
   private String oldPin;

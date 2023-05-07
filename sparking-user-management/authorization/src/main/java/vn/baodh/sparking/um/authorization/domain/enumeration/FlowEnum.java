@@ -5,15 +5,14 @@ public enum FlowEnum {
   UNKNOWN(0, "unknown"),
 
   // auth
-  CHECK_PHONE(1, "auth/check-phone"),
-  VERIFY_PHONE(2, "auth/verify-phone"),
-  LOGIN(3, "auth/login"),
-  SIGN_UP(4, "auth/sign-up"),
+  CHECK_PHONE(1, "user/auth/check-phone"),
+  VERIFY_PHONE(2, "user/auth/verify-phone"),
+  LOGIN(3, "user/auth/login"),
+  SIGN_UP(4, "user/auth/sign-up"),
 
   // profile
-  GET_USER(5, "profile/get-user"),
-  SET_NEW_PASSWORD(6, "profile/set-new-password");
-  ;
+  GET_USER(5, "user/profile/get-user"),
+  SET_NEW_PASSWORD(6, "user/profile/set-new-password");;
 
   private final int value;
   private final String flowName;

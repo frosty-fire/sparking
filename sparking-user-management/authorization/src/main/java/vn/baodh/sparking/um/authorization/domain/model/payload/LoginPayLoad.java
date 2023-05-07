@@ -2,6 +2,7 @@ package vn.baodh.sparking.um.authorization.domain.model.payload;
 
 import java.util.Map;
 import lombok.Data;
+import vn.baodh.sparking.um.authorization.domain.model.PayLoad;
 
 @Data
 public class LoginPayLoad implements PayLoad {
