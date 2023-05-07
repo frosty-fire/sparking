@@ -9,7 +9,7 @@ import vn.baodh.sparking.um.authorization.domain.enumeration.StatusEnum;
 public class BaseResponse<T> extends BaseEntity {
 
   public int returnCode = 0;
-  public String returnMessage = "";
+  public String returnMessage;
   public T[] data;
 
   public void updateResponse(int statusCode) {

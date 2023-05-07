@@ -6,17 +6,18 @@ import vn.baodh.sparking.um.authorization.domain.model.PayLoad;
 
 @Data
 public class SignUpPayload implements PayLoad {
-  private String phone = "";
-  private String pin = "";
-  private String fullName = "";
-  private String gender = "";
-  private String birthday = "";
-  private String email = "";
-  private String imageUrl = "";
 
-  private String deviceId = "";
-  private String deviceModel = "";
-  private String appVersion = "";
+  private String phone;
+  private String pin;
+  private String fullName;
+  private String gender;
+  private String birthday;
+  private String email;
+  private String imageUrl;
+
+  private String deviceId;
+  private String deviceModel;
+  private String appVersion;
 
   public SignUpPayload getPayLoadInfo(Map<String, ?> params) {
     SignUpPayload payload = new SignUpPayload();
@@ -36,9 +37,9 @@ public class SignUpPayload implements PayLoad {
 
   // TODO: need update
   public boolean validatePayload() {
-    return this.getPhone().matches("^\\d{1,20}$")
-        && this.getPin().matches("^\\d{6}$")
-        && this.getFullName().matches(".+")
-        && this.getGender().matches("^(Male|Female|Indefinite)$");
+    return this.getPhone() != null && this.getPhone().matches("^\\d{1,20}$")
+        && this.getPin() != null && this.getPin().matches("^\\d{6}$")
+        && this.getFullName() != null && this.getFullName().matches(".+")
+        && this.getGender() != null && this.getGender().matches("^(Male|Female|Indefinite)$");
   }
 }

@@ -7,14 +7,15 @@ import vn.baodh.sparking.um.authorization.domain.model.PayLoad;
 
 @Data
 public class SetNewPasswordPayload implements PayLoad {
-  private String phone = "";
-  private String isRequireOld = "";
-  private String oldPin = "";
-  private String newPin = "";
 
-  private String deviceId = "";
-  private String deviceModel = "";
-  private String appVersion = "";
+  private String phone;
+  private String isRequireOld;
+  private String oldPin;
+  private String newPin;
+
+  private String deviceId;
+  private String deviceModel;
+  private String appVersion;
 
   public SetNewPasswordPayload getPayLoadInfo(Map<String, ?> params) {
     SetNewPasswordPayload payload = new SetNewPasswordPayload();
@@ -31,9 +32,9 @@ public class SetNewPasswordPayload implements PayLoad {
 
   // TODO: need update
   public boolean validatePayload() {
-    return this.getPhone().matches("^\\d{1,20}$")
-        && (Objects.equals(this.getIsRequireOld(), "false")
-        || this.getOldPin().matches("^\\d{6}$"))
-        && this.getNewPin().matches("^\\d{6}$");
+    return this.getPhone() != null && this.getPhone().matches("^\\d{1,20}$")
+        && ((this.getIsRequireOld() != null && Objects.equals(this.getIsRequireOld(), "false"))
+        || (this.getOldPin() != null && this.getOldPin().matches("^\\d{6}$")))
+        && this.getNewPin() != null && this.getNewPin().matches("^\\d{6}$");
   }
 }

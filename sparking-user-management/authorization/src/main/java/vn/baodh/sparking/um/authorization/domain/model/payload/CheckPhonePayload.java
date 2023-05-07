@@ -7,11 +7,11 @@ import vn.baodh.sparking.um.authorization.domain.model.PayLoad;
 @Data
 public class CheckPhonePayload implements PayLoad {
 
-  private String phone = "";
+  private String phone;
 
-  private String deviceId = "";
-  private String deviceModel = "";
-  private String appVersion = "";
+  private String deviceId;
+  private String deviceModel;
+  private String appVersion;
 
   public CheckPhonePayload getPayLoadInfo(Map<String, ?> params) {
     CheckPhonePayload payload = new CheckPhonePayload();
@@ -25,6 +25,6 @@ public class CheckPhonePayload implements PayLoad {
 
   // TODO
   public boolean validatePayload() {
-    return this.getPhone().matches("^\\d{1,20}$");
+    return this.getPhone() != null && this.getPhone().matches("^\\d{1,20}$");
   }
 }

@@ -6,12 +6,12 @@ import vn.baodh.sparking.um.authorization.domain.model.PayLoad;
 
 @Data
 public class LoginPayLoad implements PayLoad {
-  private String phone = "";
-  private String pin = "";
+  private String phone;
+  private String pin;
 
-  private String deviceId = "";
-  private String deviceModel = "";
-  private String appVersion = "";
+  private String deviceId;
+  private String deviceModel;
+  private String appVersion;
 
   public LoginPayLoad getPayLoadInfo(Map<String, ?> params) {
     LoginPayLoad payload = new LoginPayLoad();
@@ -26,7 +26,7 @@ public class LoginPayLoad implements PayLoad {
 
   // TODO: need update
   public boolean validatePayload() {
-    return this.getPhone().matches("^\\d{1,20}$")
-        && this.getPin().matches("^\\d{6}$");
+    return this.getPhone() != null && this.getPhone().matches("^\\d{1,20}$")
+        && this.getPin() != null && this.getPin().matches("^\\d{6}$");
   }
 }
