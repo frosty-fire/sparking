@@ -7,14 +7,14 @@ import vn.baodh.sparking.um.authorization.domain.model.PayLoad;
 
 @Data
 public class SetNewPasswordPayload implements PayLoad {
-  private String phone;
-  private String isRequireOld;
-  private String oldPin;
-  private String newPin;
+  private String phone = "";
+  private String isRequireOld = "";
+  private String oldPin = "";
+  private String newPin = "";
 
-  private String deviceId;
-  private String deviceModel;
-  private String appVersion;
+  private String deviceId = "";
+  private String deviceModel = "";
+  private String appVersion = "";
 
   public SetNewPasswordPayload getPayLoadInfo(Map<String, ?> params) {
     SetNewPasswordPayload payload = new SetNewPasswordPayload();

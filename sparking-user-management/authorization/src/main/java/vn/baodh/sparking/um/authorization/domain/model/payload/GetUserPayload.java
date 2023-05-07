@@ -6,11 +6,11 @@ import vn.baodh.sparking.um.authorization.domain.model.PayLoad;
 
 @Data
 public class GetUserPayload implements PayLoad {
-  private String phone;
+  private String phone = "";
 
-  private String deviceId;
-  private String deviceModel;
-  private String appVersion;
+  private String deviceId = "";
+  private String deviceModel = "";
+  private String appVersion = "";
 
   public GetUserPayload getPayLoadInfo(Map<String, ?> params) {
     GetUserPayload payload = new GetUserPayload();
