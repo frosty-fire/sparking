@@ -30,14 +30,14 @@ public class CheckPhoneHandler implements FlowHandler {
       } else {
         response.updateResponse(StatusEnum.INVALID_PARAMETER.getStatusCode());
       }
-      log.info("[CheckPhoneHandler] Finish handle signup requestPhone: {}, response: {}",
-          baseRequestInfo.getParam("phone"), response);
+      log.info("[CheckPhoneHandler] Finish handle request: {}, response: {}",
+          baseRequestInfo, response);
       return response;
     } catch (Exception exception) {
       response.updateResponse(StatusEnum.EXCEPTION.getStatusCode());
       log.error(
-          "[CheckPhoneHandler] Handler handle >exception< with requestPhone: {}, response: {}, ",
-          baseRequestInfo.getParam("phone"), response, exception);
+          "[CheckPhoneHandler] Handler handle >exception< with request: {}, response: {}, ",
+          baseRequestInfo, response, exception);
       return response;
     }
   }

@@ -33,18 +33,18 @@ public class SignUpHandler implements FlowHandler {
       } else {
         response.updateResponse(StatusEnum.INVALID_PARAMETER.getStatusCode());
       }
-      log.info("[SignUpHandler] Finish handle signup requestPhone: {}, response: {}",
-          baseRequestInfo.getParam("phone"), response);
+      log.info("[SignUpHandler] Finish handle request: {}, response: {}",
+          baseRequestInfo, response);
       return response;
     } catch (DuplicateKeyException exception) {
       response.updateResponse(StatusEnum.DUPLICATE_PHONE.getStatusCode());
-      log.info("[SignUpHandler] Handler handle >duplicate key< with requestPhone: {}, response: {}",
-          baseRequestInfo.getParam("phone"), response);
+      log.info("[SignUpHandler] Handler handle >duplicate key< with request: {}, response: {}",
+          baseRequestInfo, response);
       return response;
     } catch (Exception exception) {
       response.updateResponse(StatusEnum.EXCEPTION.getStatusCode());
-      log.error("[SignUpHandler] Handler handle >exception< with requestPhone: {}, response: {}, ",
-          baseRequestInfo.getParam("phone"), response, exception);
+      log.error("[SignUpHandler] Handler handle >exception< with request: {}, response: {}, ",
+          baseRequestInfo, response, exception);
       return response;
     }
   }

@@ -60,13 +60,13 @@ public class SetNewPasswordHandler implements FlowHandler {
       } else {
         response.updateResponse(StatusEnum.INVALID_PARAMETER.getStatusCode());
       }
-      log.info("[SetNewPasswordHandler] Finish handle set new password requestPhone: {}, response: {}",
-          baseRequestInfo.getParam("phone"), response);
+      log.info("[SetNewPasswordHandler] Finish handle request: {}, response: {}",
+          baseRequestInfo, response);
       return response;
     } catch (Exception exception) {
       response.updateResponse(StatusEnum.EXCEPTION.getStatusCode());
-      log.error("[SetNewPasswordHandler] Handler handle >exception< with requestPhone: {}, response: {}, ",
-          baseRequestInfo.getParam("phone"), response, exception);
+      log.error("[SetNewPasswordHandler] Handler handle >exception< with request: {}, response: {}, ",
+          baseRequestInfo, response, exception);
       return response;
     }
   }

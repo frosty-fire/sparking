@@ -31,14 +31,14 @@ public class GetUserHandler implements FlowHandler {
       } else {
         response.updateResponse(StatusEnum.INVALID_PARAMETER.getStatusCode());
       }
-      log.info("[GetUserHandler] Finish handle signup requestPhone: {}, response: {}",
-          baseRequestInfo.getParam("phone"), response);
+      log.info("[GetUserHandler] Finish handle request: {}, response: {}",
+          baseRequestInfo, response);
       return response;
     } catch (Exception exception) {
       response.updateResponse(StatusEnum.EXCEPTION.getStatusCode());
       log.error(
-          "[GetUserHandler] Handler handle >exception< with requestPhone: {}, response: {}, ",
-          baseRequestInfo.getParam("phone"), response, exception);
+          "[GetUserHandler] Handler handle >exception< with request: {}, response: {}, ",
+          baseRequestInfo, response, exception);
       return response;
     }
   }
