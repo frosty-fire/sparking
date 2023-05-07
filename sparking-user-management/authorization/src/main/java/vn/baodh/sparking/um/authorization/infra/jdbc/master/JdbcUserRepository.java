@@ -11,7 +11,6 @@ import vn.baodh.sparking.um.authorization.domain.model.UserModel;
 import vn.baodh.sparking.um.authorization.domain.repository.UserRepository;
 import vn.baodh.sparking.um.authorization.infra.jdbc.entity.UserEntity;
 
-//@Limer(name = Metrics.REPOSITORY)
 @Repository
 public class JdbcUserRepository implements UserRepository {
 
@@ -24,7 +23,7 @@ public class JdbcUserRepository implements UserRepository {
   }
 
   @Override
-  public UserModel create(UserModel userModel) throws Exception {
+  public boolean create(UserModel userModel) throws Exception {
     var prep = """
         insert into %s (user_id, phone, pin, full_name, gender, birthday, email, cic, image_url, app_config, created_at, updated_at)
         values (:user_id, :phone, :pin, :full_name, :gender, :birthday, :email, :cic, :image_url, :app_config, now(3), now(3))
@@ -43,8 +42,7 @@ public class JdbcUserRepository implements UserRepository {
     params.addValue("image_url", entity.getImageUrl());
     params.addValue("app_config", entity.getAppConfig());
     try {
-      jdbcTemplate.update(sql, params);
-      return userModel;
+      return jdbcTemplate.update(sql, params) != 0;
     } catch (DataIntegrityViolationException exception) {
       throw new DuplicateKeyException("duplicated user_id: " + exception);
     } catch (Exception exception) {
