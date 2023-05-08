@@ -41,6 +41,9 @@ public class UserHttpController {
   ) {
     BaseResponse<?> response = new BaseResponse<>();
     try {
+      log.info(
+          "[{}] Start handleGet with request: {}",
+          this.getClass().getSimpleName(), params);
       String methodName = getMethodName(uri);
       BaseRequestInfo<String> baseRequestInfo
           = new BaseRequestInfo<>(methodName, params);
@@ -66,6 +69,9 @@ public class UserHttpController {
       @RequestBody BaseRequest request) {
     BaseResponse<?> response = new BaseResponse<>();
     try {
+      log.info(
+          "[{}] Start handlePost with request: {}",
+          this.getClass().getSimpleName(), request);
       String methodName = getMethodName(uri);
       methodName = methodName + "/" + request.getMethod();
       BaseRequestInfo<String> baseRequestInfo = new BaseRequestInfo<>(
