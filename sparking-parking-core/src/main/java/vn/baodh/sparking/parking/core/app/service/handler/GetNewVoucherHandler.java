@@ -5,40 +5,43 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import vn.baodh.sparking.parking.core.app.service.FlowHandler;
 import vn.baodh.sparking.parking.core.domain.enumeration.StatusEnum;
-import vn.baodh.sparking.parking.core.domain.model.VehicleDetailModel;
+import vn.baodh.sparking.parking.core.domain.model.VehicleModel;
+import vn.baodh.sparking.parking.core.domain.model.VoucherModel;
 import vn.baodh.sparking.parking.core.domain.model.base.BaseRequestInfo;
 import vn.baodh.sparking.parking.core.domain.model.base.BaseResponse;
-import vn.baodh.sparking.parking.core.domain.model.payload.GetVehiclePayload;
+import vn.baodh.sparking.parking.core.domain.model.payload.GetNewVoucherPayload;
+import vn.baodh.sparking.parking.core.domain.model.payload.GetVehiclesPayload;
 import vn.baodh.sparking.parking.core.domain.repository.ParkingRepository;
+import vn.baodh.sparking.parking.core.domain.repository.PromotionRepository;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class GetVehicleHandler implements FlowHandler {
+public class GetNewVoucherHandler implements FlowHandler {
 
-  private final ParkingRepository parkingRepository;
+  private final PromotionRepository promotionRepository;
 
   @Override
   public BaseResponse<?> handle(BaseRequestInfo<?> baseRequestInfo) {
-    BaseResponse<VehicleDetailModel> response = new BaseResponse<>();
+    BaseResponse<VoucherModel> response = new BaseResponse<>();
     try {
-      GetVehiclePayload payload = new GetVehiclePayload().getPayLoadInfo(
+      GetNewVoucherPayload payload = new GetNewVoucherPayload().getPayLoadInfo(
           baseRequestInfo.getParams());
       if (payload.validatePayload()) {
-        response.data = parkingRepository.getVehicleById(payload.getVehicleId())
-            .toArray(new VehicleDetailModel[0]);
+        response.data = promotionRepository.getVouchers(10)
+            .toArray(new VoucherModel[0]);
         response.updateResponse(StatusEnum.SUCCESS.getStatusCode());
       } else {
         response.updateResponse(StatusEnum.INVALID_PARAMETER.getStatusCode());
       }
       log.info(
-          "[GetVehicleHandler] Finish handle with request: {}, response: {}, ",
+          "[GetNewVoucherHandler] Finish handle with request: {}, response: {}, ",
           baseRequestInfo, response);
       return response;
     } catch (Exception exception) {
       response.updateResponse(StatusEnum.EXCEPTION.getStatusCode());
       log.error(
-          "[GetVehicleHandler] Handler handle >exception< with request: {}, response: {}, ",
+          "[GetNewVoucherHandler] Handler handle >exception< with request: {}, response: {}, ",
           baseRequestInfo, response, exception);
       return response;
     }

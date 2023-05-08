@@ -5,6 +5,8 @@ import lombok.experimental.Accessors;
 
 @Data
 @Accessors(chain = true)
-public class ParkingModel {
-
+public class LocationModel {
+  private String locationId;
+  private String locationName;
+  private String address;
 }

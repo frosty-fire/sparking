@@ -10,7 +10,8 @@ public enum FlowEnum {
 
   // parking
   GET_VEHICLE(3, "parking/get-vehicle"),
-  GET_VEHICLES(4, "parking/get-vehicles")
+  GET_VEHICLES(4, "parking/get-vehicles"),
+  GET_VOUCHERS(5, "voucher/get-vouchers")
   ;
 
   private final int value;
