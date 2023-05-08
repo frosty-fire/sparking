@@ -11,6 +11,8 @@ import vn.baodh.sparking.parking.core.domain.enumeration.StatusEnum;
 import vn.baodh.sparking.parking.core.domain.model.base.BaseRequestInfo;
 import vn.baodh.sparking.parking.core.domain.model.base.BaseResponse;
 import vn.baodh.sparking.parking.core.domain.model.TokenModel;
+import vn.baodh.sparking.parking.core.domain.model.payload.CheckInPayload;
+import vn.baodh.sparking.parking.core.domain.model.payload.CheckOutPayload;
 
 @Slf4j
 @Component
@@ -21,15 +23,21 @@ public class CheckOutHandler implements FlowHandler {
   public BaseResponse<?> handle(BaseRequestInfo<?> baseRequestInfo) {
     BaseResponse<TokenModel> response = new BaseResponse<>();
     try {
-      String token = "sparking-check-out-private-key" + new Date();
-      Calendar calendar = Calendar.getInstance();
-      calendar.set(Calendar.SECOND, calendar.get(Calendar.SECOND) + 60);
-      response.data = new TokenModel[]{
-          new TokenModel()
-              .setQrToken(Base64.getEncoder().encodeToString(token.getBytes()))
-              .setExpiredTime(String.valueOf(calendar.getTimeInMillis()))
-      };
-      response.updateResponse(StatusEnum.SUCCESS.getStatusCode());
+      CheckOutPayload payload = new CheckOutPayload().getPayLoadInfo(
+          baseRequestInfo.getParams());
+      if (payload.validatePayload()) {
+        String token = "sparking-check-out-private-key" + new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.SECOND, calendar.get(Calendar.SECOND) + 60);
+        response.data = new TokenModel[]{
+            new TokenModel()
+                .setQrToken(Base64.getEncoder().encodeToString(token.getBytes()))
+                .setExpiredTime(String.valueOf(calendar.getTimeInMillis()))
+        };
+        response.updateResponse(StatusEnum.SUCCESS.getStatusCode());
+      } else {
+        response.updateResponse(StatusEnum.INVALID_PARAMETER.getStatusCode());
+      }
       log.info(
           "[CheckOutHandler] Finish handle with request: {}, response: {}, ",
           baseRequestInfo, response);

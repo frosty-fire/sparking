@@ -11,4 +11,5 @@ public class VehicleDetailModel {
   private String entryTime;
   private LocationModel location;
   private DurationModel duration;
+  private Double fee;
 }

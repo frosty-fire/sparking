@@ -28,7 +28,6 @@ public class JdbcParkingRepository implements ParkingRepository {
 
   @Override
   public List<VehicleModel> getVehiclesByPhone(String phone) throws Exception {
-    log.info(phone);
     List<VehicleModel> vehicleModels = new ArrayList<>();
     VehicleModel vehicleModel1 = new VehicleModel()
         .setVehicleId("1")
@@ -47,7 +46,6 @@ public class JdbcParkingRepository implements ParkingRepository {
 
   @Override
   public List<VehicleDetailModel> getVehicleById(String vehicleId) throws Exception {
-    log.info(vehicleId);
     List<VehicleDetailModel> vehicleModels = new ArrayList<>();
     VehicleDetailModel vehicleModel1 = new VehicleDetailModel()
         .setVehicleId("1")
@@ -61,7 +59,8 @@ public class JdbcParkingRepository implements ParkingRepository {
             .setHours(23)
             .setMinutes(59)
             .setSeconds(50)
-            .setMilliseconds(123));
+            .setMilliseconds(123))
+        .setFee(100.000);
     vehicleModels.add(vehicleModel1);
     return vehicleModels;
   }
