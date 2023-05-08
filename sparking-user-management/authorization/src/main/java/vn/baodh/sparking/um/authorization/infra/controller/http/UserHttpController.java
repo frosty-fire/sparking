@@ -39,11 +39,12 @@ public class UserHttpController {
       HttpServletRequest uri,
       @RequestParam Map<String, String> params
   ) {
+    var startTime = System.currentTimeMillis();
     BaseResponse<?> response = new BaseResponse<>();
     try {
       log.info(
-          "[{}] Start handleGet with request: {}",
-          this.getClass().getSimpleName(), params);
+          "[{}] Start handleGet with request: {}, {}",
+          this.getClass().getSimpleName(), params, startTime);
       String methodName = getMethodName(uri);
       BaseRequestInfo<String> baseRequestInfo
           = new BaseRequestInfo<>(methodName, params);
@@ -51,14 +52,18 @@ public class UserHttpController {
       FlowHandler flowHandler = flowMapping.getFlowHandler(flowEnum);
       response = flowHandler.handle(baseRequestInfo);
       log.info(
-          "[{}] Finish handlePost with request: {}, response: {}",
-          this.getClass().getSimpleName(), params, response);
+          "[{}][{}ms] Finish handleGet with request: {}, response: {}",
+          this.getClass().getSimpleName(),
+          System.currentTimeMillis() - startTime,
+          params, response);
       return ResponseEntity.status(HttpStatus.OK).body(response);
     } catch (Exception exception) {
       response.updateResponse(StatusEnum.EXCEPTION.getStatusCode());
       log.error(
-          "[{}] Finish handlePost with request: {}, response: {}",
-          this.getClass().getSimpleName(), uri, response, exception);
+          "[{}][{}ms] handleGet <exception> with request: {}, response: {}",
+          this.getClass().getSimpleName(),
+          System.currentTimeMillis() - startTime,
+          uri, response, exception);
       return ResponseEntity.status(HttpStatus.OK).body(response);
     }
   }
@@ -67,11 +72,12 @@ public class UserHttpController {
   public ResponseEntity<?> handlePost(
       HttpServletRequest uri,
       @RequestBody BaseRequest request) {
+    var startTime = System.currentTimeMillis();
     BaseResponse<?> response = new BaseResponse<>();
     try {
       log.info(
-          "[{}] Start handlePost with request: {}",
-          this.getClass().getSimpleName(), request);
+          "[{}] Start handlePost with request: {}, {}",
+          this.getClass().getSimpleName(), request, startTime);
       String methodName = getMethodName(uri);
       methodName = methodName + "/" + request.getMethod();
       BaseRequestInfo<String> baseRequestInfo = new BaseRequestInfo<>(
@@ -81,14 +87,18 @@ public class UserHttpController {
       FlowHandler flowHandler = flowMapping.getFlowHandler(flowEnum);
       response = flowHandler.handle(baseRequestInfo);
       log.info(
-          "[{}] Finish handlePost with request: {}, response: {}",
-          this.getClass().getSimpleName(), request, response);
+          "[{}][{}ms] Finish handlePost with request: {}, response: {}",
+          this.getClass().getSimpleName(),
+          System.currentTimeMillis() - startTime,
+          request, response);
       return ResponseEntity.status(HttpStatus.OK).body(response);
     } catch (Exception exception) {
       response.updateResponse(StatusEnum.EXCEPTION.getStatusCode());
       log.error(
-          "[{}] handlePost exception with request: {}, response: {}, ",
-          this.getClass().getSimpleName(), request, response, exception);
+          "[{}][{}ms] handlePost <exception> with request: {}, response: {}, ",
+          this.getClass().getSimpleName(),
+          System.currentTimeMillis() - startTime,
+          request, response, exception);
       return ResponseEntity.status(HttpStatus.OK).body(response);
     }
   }
