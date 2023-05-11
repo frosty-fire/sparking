@@ -11,3 +11,6 @@ infra:
       password: sparking
       max-pool-size: 16
 
+logging:
+  level:
+    io.socket.engineio.client.Socket: TRACE

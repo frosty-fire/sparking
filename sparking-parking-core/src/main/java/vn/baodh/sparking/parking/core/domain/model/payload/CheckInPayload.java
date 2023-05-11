@@ -2,9 +2,11 @@ package vn.baodh.sparking.parking.core.domain.model.payload;
 
 import java.util.Map;
 import lombok.Data;
+import lombok.experimental.Accessors;
 import vn.baodh.sparking.parking.core.domain.model.PayLoad;
 
 @Data
+@Accessors(chain = true)
 public class CheckInPayload implements PayLoad {
 
   private String phone;

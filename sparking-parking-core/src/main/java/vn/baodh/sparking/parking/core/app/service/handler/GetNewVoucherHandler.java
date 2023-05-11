@@ -28,8 +28,8 @@ public class GetNewVoucherHandler implements FlowHandler {
       GetNewVoucherPayload payload = new GetNewVoucherPayload().getPayLoadInfo(
           baseRequestInfo.getParams());
       if (payload.validatePayload()) {
-        response.data = promotionRepository.getVouchers(10)
-            .toArray(new VoucherModel[0]);
+        response.setData(promotionRepository.getVouchers(10)
+            .toArray(new VoucherModel[0]));
         response.updateResponse(StatusEnum.SUCCESS.getStatusCode());
       } else {
         response.updateResponse(StatusEnum.INVALID_PARAMETER.getStatusCode());

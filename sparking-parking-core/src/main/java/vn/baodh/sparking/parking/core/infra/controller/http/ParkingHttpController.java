@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,11 +16,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import vn.baodh.sparking.parking.core.app.mapping.FlowMapping;
 import vn.baodh.sparking.parking.core.app.service.FlowHandler;
+import vn.baodh.sparking.parking.core.app.service.socket.QrStatusEventUpdater;
 import vn.baodh.sparking.parking.core.domain.enumeration.FlowEnum;
 import vn.baodh.sparking.parking.core.domain.enumeration.StatusEnum;
 import vn.baodh.sparking.parking.core.domain.model.base.BaseRequest;
 import vn.baodh.sparking.parking.core.domain.model.base.BaseRequestInfo;
 import vn.baodh.sparking.parking.core.domain.model.base.BaseResponse;
+import vn.baodh.sparking.parking.core.domain.model.payload.StatusPayLoad;
 
 @Slf4j
 @RestController
@@ -28,17 +31,32 @@ import vn.baodh.sparking.parking.core.domain.model.base.BaseResponse;
 public class ParkingHttpController {
 
   private final FlowMapping flowMapping;
+  private final QrStatusEventUpdater qrStatusEventUpdater;
 
   @GetMapping("/ping")
   public ResponseEntity<?> ping() {
+    try {
+      log.info("handle");
+      if (qrStatusEventUpdater.handle(new StatusPayLoad()
+          .setStatus(1)
+          .setStatusMessage("Sịn vl")
+          .setRoomId("123_456")
+      )) {
+        log.info("handle success");
+      } else {
+        log.info("handle fail");
+      }
+    } catch (Exception e) {
+      log.error("fail");
+    }
     return ResponseEntity.ok("pong");
   }
 
-  @GetMapping("/**")
+  @GetMapping(value = "/{any:^(?!socket\\.io).*$}")
   public ResponseEntity<?> handleGet(
       HttpServletRequest uri,
-      @RequestParam Map<String, String> params
-  ) {
+      @RequestParam Map<String, String> params,
+      @PathVariable("any") String any) {
     var startTime = System.currentTimeMillis();
     BaseResponse<?> response = new BaseResponse<>();
     try {
@@ -68,10 +86,11 @@ public class ParkingHttpController {
     }
   }
 
-  @PostMapping(value = "/**", consumes = MediaType.APPLICATION_JSON_VALUE)
+  @PostMapping(value = "/{any:^(?!socket\\.io).*$}", consumes = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<?> handlePost(
       HttpServletRequest uri,
-      @RequestBody BaseRequest request) {
+      @RequestBody BaseRequest request,
+      @PathVariable("any") String any) {
     var startTime = System.currentTimeMillis();
     BaseResponse<?> response = new BaseResponse<>();
     try {

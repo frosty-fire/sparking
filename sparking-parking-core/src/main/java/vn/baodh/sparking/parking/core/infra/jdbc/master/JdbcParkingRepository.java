@@ -29,18 +29,18 @@ public class JdbcParkingRepository implements ParkingRepository {
   @Override
   public List<VehicleModel> getVehiclesByPhone(String phone) throws Exception {
     List<VehicleModel> vehicleModels = new ArrayList<>();
-    VehicleModel vehicleModel1 = new VehicleModel()
-        .setVehicleId("1")
-        .setLicensePlate("78-D1 427.24");
-    VehicleModel vehicleModel2 = new VehicleModel()
-        .setVehicleId("2")
-        .setLicensePlate("78-D2 427.24");
-    VehicleModel vehicleModel3 = new VehicleModel()
-        .setVehicleId("3")
-        .setLicensePlate("78-D3 427.24");
-    vehicleModels.add(vehicleModel1);
-    vehicleModels.add(vehicleModel2);
-    vehicleModels.add(vehicleModel3);
+//    VehicleModel vehicleModel1 = new VehicleModel()
+//        .setVehicleId("1")
+//        .setLicensePlate("78-D1 427.24");
+//    VehicleModel vehicleModel2 = new VehicleModel()
+//        .setVehicleId("2")
+//        .setLicensePlate("78-D2 427.24");
+//    VehicleModel vehicleModel3 = new VehicleModel()
+//        .setVehicleId("3")
+//        .setLicensePlate("78-D3 427.24");
+//    vehicleModels.add(vehicleModel1);
+//    vehicleModels.add(vehicleModel2);
+//    vehicleModels.add(vehicleModel3);
     return vehicleModels;
   }
 

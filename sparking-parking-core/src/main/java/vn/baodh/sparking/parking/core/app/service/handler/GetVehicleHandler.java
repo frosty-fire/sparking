@@ -25,8 +25,8 @@ public class GetVehicleHandler implements FlowHandler {
       GetVehiclePayload payload = new GetVehiclePayload().getPayLoadInfo(
           baseRequestInfo.getParams());
       if (payload.validatePayload()) {
-        response.data = parkingRepository.getVehicleById(payload.getVehicleId())
-            .toArray(new VehicleDetailModel[0]);
+        response.setData(parkingRepository.getVehicleById(payload.getVehicleId())
+            .toArray(new VehicleDetailModel[0]));
         response.updateResponse(StatusEnum.SUCCESS.getStatusCode());
       } else {
         response.updateResponse(StatusEnum.INVALID_PARAMETER.getStatusCode());

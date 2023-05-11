@@ -8,9 +8,9 @@ import vn.baodh.sparking.parking.core.domain.enumeration.StatusEnum;
 @EqualsAndHashCode(callSuper = true)
 public class BaseResponse<T> extends BaseEntity {
 
-  public int returnCode = 0;
-  public String returnMessage = "";
-  public T[] data;
+  private int returnCode = 0;
+  private String returnMessage = "";
+  private T[] data;
 
   public void updateResponse(int statusCode) {
     this.returnCode = statusCode;

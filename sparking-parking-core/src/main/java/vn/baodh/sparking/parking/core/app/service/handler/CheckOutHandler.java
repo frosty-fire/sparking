@@ -29,11 +29,11 @@ public class CheckOutHandler implements FlowHandler {
         String token = "sparking-check-out-private-key" + new Date();
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.SECOND, calendar.get(Calendar.SECOND) + 60);
-        response.data = new TokenModel[]{
+        response.setData(new TokenModel[]{
             new TokenModel()
                 .setQrToken(Base64.getEncoder().encodeToString(token.getBytes()))
                 .setExpiredTime(String.valueOf(calendar.getTimeInMillis()))
-        };
+        });
         response.updateResponse(StatusEnum.SUCCESS.getStatusCode());
       } else {
         response.updateResponse(StatusEnum.INVALID_PARAMETER.getStatusCode());
