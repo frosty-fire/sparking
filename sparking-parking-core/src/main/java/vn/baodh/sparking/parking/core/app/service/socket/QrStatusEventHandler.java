@@ -24,7 +24,7 @@ import vn.baodh.sparking.parking.core.domain.util.GsonUtil;
 @Configuration
 public class QrStatusEventHandler {
 
-  public final String NAMESPACE = "/test";
+  public final String NAMESPACE = "/qr-status";
 
   @Bean(BeanConstants.SOCKET_IO_CLIENT_QR_STATUS_UPDATER)
   public Socket socketIoClient() throws URISyntaxException {
@@ -67,7 +67,7 @@ public class QrStatusEventHandler {
             args, socket.getId());
 
         socket.on("joinRoom", subArgs -> {
-          var room = new RoomPayload().getPayLoadInfo((String) subArgs[0]);
+          var room = new RoomPayload().getPayLoadInfo(String.valueOf(subArgs[0]));
           var res = new BaseResponse<>();
           if (room != null && room.validatePayload()) {
             socket.joinRoom(room.getRoomId());
@@ -79,7 +79,7 @@ public class QrStatusEventHandler {
         });
 
         socket.on("updateStatus", subArgs -> {
-          var status = new StatusPayLoad().getPayLoadInfo((String) subArgs[0]);
+          var status = new StatusPayLoad().getPayLoadInfo(String.valueOf(subArgs[0]));
           var res = new BaseResponse<StatusPayLoad>();
           if (status != null && status.validatePayload()) {
             res.setData(new StatusPayLoad[]{status});
@@ -96,7 +96,7 @@ public class QrStatusEventHandler {
         });
 
         socket.on("leaveRoom", subArgs -> {
-          var room = new RoomPayload().getPayLoadInfo((String) subArgs[0]);
+          var room = new RoomPayload().getPayLoadInfo(String.valueOf(subArgs[0]));
           var res = new BaseResponse<>();
           if (room != null && room.validatePayload()) {
             socket.leaveRoom(room.getRoomId());

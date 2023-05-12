@@ -31,7 +31,7 @@ public class QrStatusEventUpdater {
         GsonUtil.toJsonString(new RoomPayload().setRoomId(status.getRoomId())));
 
     socket.on("setUp", args -> {
-      BaseResponse<?> res = GsonUtil.fromJsonString((String) args[0], BaseResponse.class);
+      BaseResponse<?> res = GsonUtil.fromJsonString(String.valueOf(args[0]), BaseResponse.class);
       if (res.getReturnCode() < 1) {
         status.setStatus(res.getReturnCode());
         status.setStatusMessage("Lỗi server không thể kết nối");
@@ -41,7 +41,7 @@ public class QrStatusEventUpdater {
     });
 
     socket.on("afterUpdate", args -> {
-      BaseResponse<?> res = GsonUtil.fromJsonString((String) args[0], BaseResponse.class);
+      BaseResponse<?> res = GsonUtil.fromJsonString(String.valueOf(args[0]), BaseResponse.class);
       if (res.getReturnCode() < 1) {
         log.error("[QrStatusEventUpdater][afterUpdate] failed, reason: {}, data: {}", res.getReturnMessage(), res.getData());
       } else {
@@ -51,7 +51,7 @@ public class QrStatusEventUpdater {
     });
 
     socket.on("tearDown", args -> {
-      BaseResponse<?> res = GsonUtil.fromJsonString((String) args[0], BaseResponse.class);
+      BaseResponse<?> res = GsonUtil.fromJsonString(String.valueOf(args[0]), BaseResponse.class);
       if (res.getReturnCode() < 1) {
         log.error("[QrStatusEventUpdater][tearDown] failed, reason: {}, data: {}", res.getReturnMessage(), res.getData());
       } else {
