@@ -31,7 +31,6 @@ public class JdbcParkingRepository implements ParkingRepository {
   @Override
   public List<VehicleModel> getVehiclesByPhone(String phone) throws Exception {
     var userId = userRepository.getUserIdByPhone(phone);
-    log.info("user: {}", userId);
     var prep = "select * from %s where user_id = :user_id";
     var sql = String.format(prep, PARKING_TABLE);
     var params = new MapSqlParameterSource();

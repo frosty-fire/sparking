@@ -38,9 +38,6 @@ public class ParkingEntity {
   }
 
   public VehicleDetailModel toVehicleDetailModel() {
-//    var entry = Timestamp.valueOf(this.getEntryTime());
-//    var diff = Timestamp.from(Instant.now()).getTime() - entry.getTime();
-//    log.info(String.valueOf(Timestamp.from(Instant.ofEpochMilli(diff))));
 
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
     LocalDateTime dateTime = LocalDateTime.parse(this.getEntryTime(), formatter);
@@ -51,7 +48,6 @@ public class ParkingEntity {
     int seconds = (int) (totalSecs % 60);
     int milliseconds = (int) (diff % 1000);
 
-    log.info(String.valueOf(diff));
     return new VehicleDetailModel()
         .setVehicleId(this.getParkingId())
         .setLicensePlate(this.getLicensePlate())
