@@ -12,7 +12,7 @@
   <artifactId>user-management</artifactId>
   <packaging>pom</packaging>
   <modules>
-    <module>authorization</module>
+    <module>sparking-authorization</module>
   </modules>
 
   <properties>

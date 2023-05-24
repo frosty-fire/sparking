@@ -26,7 +26,7 @@ public class CheckOutHandler implements FlowHandler {
       CheckOutPayload payload = new CheckOutPayload().getPayLoadInfo(
           baseRequestInfo.getParams());
       if (payload.validatePayload()) {
-        String token = "sparking-check-out-private-key" + new Date();
+        String token = payload.getVehicleId();
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.SECOND, calendar.get(Calendar.SECOND) + 60);
         response.setData(new TokenModel[]{

@@ -11,4 +11,5 @@ public interface UserRepository {
 
   List<UserModel> getUserByPhone(String phone) throws Exception;
 
+  String getUserIdByPhone(String phone) throws Exception;
 }

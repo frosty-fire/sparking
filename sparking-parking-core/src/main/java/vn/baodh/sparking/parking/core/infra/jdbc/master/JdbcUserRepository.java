@@ -82,4 +82,18 @@ public class JdbcUserRepository implements UserRepository {
       throw new Exception("database exception: " + exception);
     }
   }
+
+  @Override
+  public String getUserIdByPhone(String phone) throws Exception {
+    var prep = "select user_id from %s where phone = :phone";
+    var sql = String.format(prep, USER_TABLE);
+    var params = new MapSqlParameterSource();
+    params.addValue("phone", phone);
+    try {
+      var data = jdbcTemplate.query(sql, params, (rs, i) -> rs.getString("user_id"));
+      return (data.size() > 0) ? data.get(0) : "";
+    } catch (Exception exception) {
+      throw new Exception("database exception: " + exception);
+    }
+  }
 }

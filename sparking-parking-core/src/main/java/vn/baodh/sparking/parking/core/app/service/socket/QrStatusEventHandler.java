@@ -75,7 +75,7 @@ public class QrStatusEventHandler {
           } else {
             res.updateResponse(StatusEnum.INVALID_PARAMETER.getStatusCode());
           }
-          socket.send("setUp", GsonUtil.toJsonString(res));
+          socket.send("setUp", GsonUtil.toJsonString(res), (room!= null) ? room.getRoomId() : "");
         });
 
         socket.on("updateStatus", subArgs -> {
@@ -104,7 +104,7 @@ public class QrStatusEventHandler {
           } else {
             res.updateResponse(StatusEnum.INVALID_PARAMETER.getStatusCode());
           }
-          socket.send("tearDown", GsonUtil.toJsonString(res));
+          socket.send("tearDown", GsonUtil.toJsonString(res), (room!= null) ? room.getRoomId() : "");
         });
       }
     });

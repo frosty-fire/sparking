@@ -34,13 +34,13 @@ public class ParkingHttpController {
   private final QrStatusEventUpdater qrStatusEventUpdater;
 
   @GetMapping("/ping")
-  public ResponseEntity<?> ping() {
+  public ResponseEntity<?> ping(HttpServletRequest uri, @RequestParam Map<String, String> params) {
     try {
       log.info("handle");
       if (qrStatusEventUpdater.handle(new StatusPayLoad()
           .setStatus(1)
           .setStatusMessage("Sịn vl")
-          .setRoomId("123_456")
+          .setRoomId(params.get("room_id"))
       )) {
         log.info("handle success");
       } else {
