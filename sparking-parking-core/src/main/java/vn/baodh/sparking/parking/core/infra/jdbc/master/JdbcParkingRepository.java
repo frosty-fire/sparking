@@ -57,20 +57,6 @@ public class JdbcParkingRepository implements ParkingRepository {
     } catch (Exception exception) {
       throw new Exception("database exception: " + exception);
     }
-//    List<VehicleModel> vehicleModels = new ArrayList<>();
-//    VehicleModel vehicleModel1 = new VehicleModel()
-//        .setVehicleId("1")
-//        .setLicensePlate("60-B6 427.24");
-//    VehicleModel vehicleModel2 = new VehicleModel()
-//        .setVehicleId("2")
-//        .setLicensePlate("60-D1 230.10");
-//    VehicleModel vehicleModel3 = new VehicleModel()
-//        .setVehicleId("3")
-//        .setLicensePlate("60-D1 423.12");
-//    vehicleModels.add(vehicleModel1);
-//    vehicleModels.add(vehicleModel2);
-//    vehicleModels.add(vehicleModel3);
-//    return vehicleModels;
   }
 
   @Override
