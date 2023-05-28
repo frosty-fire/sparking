@@ -1,13 +1,14 @@
 package vn.baodh.sparking.parking.core.app.service.handler;
 
-import java.util.Base64;
 import java.util.Calendar;
-import java.util.Date;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import vn.baodh.sparking.parking.core.app.security.qrtoken.RSA;
 import vn.baodh.sparking.parking.core.app.service.FlowHandler;
 import vn.baodh.sparking.parking.core.domain.enumeration.StatusEnum;
+import vn.baodh.sparking.parking.core.domain.model.QrModel;
+import vn.baodh.sparking.parking.core.domain.model.QrType;
 import vn.baodh.sparking.parking.core.domain.model.TokenModel;
 import vn.baodh.sparking.parking.core.domain.model.base.BaseRequestInfo;
 import vn.baodh.sparking.parking.core.domain.model.base.BaseResponse;
@@ -18,6 +19,8 @@ import vn.baodh.sparking.parking.core.domain.model.payload.CheckInPayload;
 @RequiredArgsConstructor
 public class CheckInHandler implements FlowHandler {
 
+  private final RSA rsa;
+
   @Override
   public BaseResponse<?> handle(BaseRequestInfo<?> baseRequestInfo) {
     BaseResponse<TokenModel> response = new BaseResponse<>();
@@ -25,12 +28,18 @@ public class CheckInHandler implements FlowHandler {
       CheckInPayload payload = new CheckInPayload().getPayLoadInfo(
           baseRequestInfo.getParams());
       if (payload.validatePayload()) {
-        String token = payload.getPhone();
-        Calendar calendar = Calendar.getInstance();
+        var timestamp = System.currentTimeMillis();
+        var calendar = Calendar.getInstance();
         calendar.set(Calendar.SECOND, calendar.get(Calendar.SECOND) + 60);
         response.setData(new TokenModel[]{
             new TokenModel()
-                .setQrToken(Base64.getEncoder().encodeToString(token.getBytes()))
+                .setQrToken(rsa.encryptQr(new QrModel()
+                        .setSocketKey(payload.getSocketKey())
+                        .setType(QrType.QR_CHECK_IN)
+                        .setTimestamp(timestamp)
+                        .setUserPhone(payload.getPhone())
+                    )
+                )
                 .setExpiredTime(String.valueOf(calendar.getTimeInMillis()))
         });
         response.updateResponse(StatusEnum.SUCCESS.getStatusCode());

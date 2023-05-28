@@ -14,8 +14,7 @@ public enum FlowEnum {
   GET_VOUCHERS(5, "voucher/get-vouchers"),
 
   // main
-  ENTER_PARKING(6, "parking/enter"),
-  EXIT_PARKING(7, "parking/exit")
+  SUBMIT_QR(6, "parking/submit-qr"),
   ;
 
   private final int value;

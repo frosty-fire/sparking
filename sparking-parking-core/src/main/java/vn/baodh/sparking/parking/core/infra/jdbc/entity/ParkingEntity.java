@@ -52,7 +52,7 @@ public class ParkingEntity {
         .setVehicleId(this.getParkingId())
         .setLicensePlate(this.getLicensePlate())
         .setLocation(new LocationModel()
-            .setLocationId("123")
+            .setLocationId("20230500000000000001")
             .setLocationName("GigaMall")
             .setAddress("Thủ Đức, Tp.Hồ Chí Minh"))
         .setEntryTime(this.getEntryTime())

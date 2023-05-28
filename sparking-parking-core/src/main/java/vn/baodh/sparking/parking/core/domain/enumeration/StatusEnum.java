@@ -6,9 +6,9 @@ public enum StatusEnum {
   UNKNOWN(0, "Lỗi không xác định, vui lòng thử lại"),
   EXCEPTION(-1, "Hệ thống đang bị lỗi, vui lòng thử lại sau"),
   INVALID_PARAMETER(-2, "Các giá trị truyền vào không hợp lệ"),
-  DUPLICATE_PHONE(-3, "Số điện thoại đã tồn tại"),
-  USER_NOT_FOUND(-4, "Tài khoản không tồn tại"),
-  WRONG_OTP(-5, "OTP không hợp lệ, mời nhập lại"),
+  VEHICLE_EXISTED(-3,"Mã xe đã tồn tại, vui lòng kiểm tra"),
+  VEHICLE_NOT_FOUND(-4, "Mã xe không tồn tại, vui lòng kiểm tra"),
+  LICENSE_NOT_MATCH(-5, "Biển số xe không đúng, vui lòng kiểm tra"),
   ;
 
   private final int statusCode;

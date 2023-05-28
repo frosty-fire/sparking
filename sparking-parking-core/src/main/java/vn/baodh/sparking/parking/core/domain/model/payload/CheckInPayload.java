@@ -9,6 +9,7 @@ import vn.baodh.sparking.parking.core.domain.model.PayLoad;
 @Accessors(chain = true)
 public class CheckInPayload implements PayLoad {
 
+  private String socketKey;
   private String phone;
 
   private String deviceId;
@@ -17,6 +18,7 @@ public class CheckInPayload implements PayLoad {
 
   public CheckInPayload getPayLoadInfo(Map<String, ?> params) {
     CheckInPayload payload = new CheckInPayload();
+    payload.setSocketKey((String) params.get("socket_key"));
     payload.setPhone((String) params.get("phone"));
 
     payload.setDeviceId((String) params.get("device_id"));
