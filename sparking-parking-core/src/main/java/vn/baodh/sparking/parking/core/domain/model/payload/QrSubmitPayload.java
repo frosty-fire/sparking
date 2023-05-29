@@ -11,11 +11,13 @@ public class QrSubmitPayload implements PayLoad {
 
   private String qrToken;
   private String licensePlate;
+  private String locationId;
 
   public QrSubmitPayload getPayLoadInfo(Map<String, ?> params) {
     QrSubmitPayload payload = new QrSubmitPayload();
     payload.setQrToken((String) params.get("qr_token"));
     payload.setLicensePlate((String) params.get("license_plate"));
+    payload.setLocationId((String) params.get("location_id"));
     return payload;
   }
 

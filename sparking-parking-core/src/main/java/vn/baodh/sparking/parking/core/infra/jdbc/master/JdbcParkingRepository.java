@@ -47,7 +47,7 @@ public class JdbcParkingRepository implements ParkingRepository {
   }
 
   @Override
-  public boolean updateExit(ParkingEntity entity) throws Exception {
+  public void updateExit(ParkingEntity entity) throws Exception {
     var prep = """
         update %s set exit_time = now(3), status = :status, fee = :fee, updated_at = now(3)
         where parking_id = :parking_id;
@@ -58,7 +58,7 @@ public class JdbcParkingRepository implements ParkingRepository {
     params.addValue("status", entity.getStatus());
     params.addValue("fee", entity.getFee());
     try {
-      return jdbcTemplate.update(sql, params) != 0;
+      jdbcTemplate.update(sql, params);
     } catch (Exception exception) {
       throw new Exception("database exception: " + exception);
     }

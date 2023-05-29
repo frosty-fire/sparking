@@ -7,6 +7,7 @@ import vn.baodh.sparking.parking.core.app.service.handler.CheckInHandler;
 import vn.baodh.sparking.parking.core.app.service.handler.CheckOutHandler;
 import vn.baodh.sparking.parking.core.app.service.handler.DefaultHandler;
 import vn.baodh.sparking.parking.core.app.service.handler.GetNewVoucherHandler;
+import vn.baodh.sparking.parking.core.app.service.handler.GetNotificationsHandler;
 import vn.baodh.sparking.parking.core.app.service.handler.GetVehicleHandler;
 import vn.baodh.sparking.parking.core.app.service.handler.GetVehiclesHandler;
 import vn.baodh.sparking.parking.core.app.service.handler.SubmitQrHandler;
@@ -33,6 +34,9 @@ public class FlowMapping {
   // voucher
   private final GetNewVoucherHandler getNewVoucherHandler;
 
+  // notification
+  private final GetNotificationsHandler getNotificationsHandler;
+
   public FlowHandler getFlowHandler(FlowEnum flowEnum) {
     return switch (flowEnum) {
       case CHECK_IN -> checkInHandler;
@@ -41,6 +45,7 @@ public class FlowMapping {
       case GET_VEHICLES -> getVehiclesHandler;
       case GET_VOUCHERS -> getNewVoucherHandler;
       case SUBMIT_QR -> submitQrHandler;
+      case GET_NOTIFICATIONS -> getNotificationsHandler;
       default -> defaultHandler;
     };
   }

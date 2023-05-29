@@ -1,5 +1,6 @@
 package vn.baodh.sparking.parking.core.app.service.handler;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
@@ -10,12 +11,16 @@ import org.springframework.stereotype.Component;
 import vn.baodh.sparking.parking.core.app.security.qrtoken.RSA;
 import vn.baodh.sparking.parking.core.app.service.FlowHandler;
 import vn.baodh.sparking.parking.core.domain.enumeration.StatusEnum;
+import vn.baodh.sparking.parking.core.domain.model.NotificationModel;
+import vn.baodh.sparking.parking.core.domain.model.NotificationModel.ExtraInfo;
 import vn.baodh.sparking.parking.core.domain.model.QrType;
 import vn.baodh.sparking.parking.core.domain.model.base.BaseRequestInfo;
 import vn.baodh.sparking.parking.core.domain.model.base.BaseResponse;
 import vn.baodh.sparking.parking.core.domain.model.payload.QrSubmitPayload;
+import vn.baodh.sparking.parking.core.domain.repository.NotificationRepository;
 import vn.baodh.sparking.parking.core.domain.repository.ParkingRepository;
 import vn.baodh.sparking.parking.core.domain.repository.UserRepository;
+import vn.baodh.sparking.parking.core.infra.jdbc.entity.NotificationEntity;
 import vn.baodh.sparking.parking.core.infra.jdbc.entity.ParkingEntity;
 
 @Slf4j
@@ -26,6 +31,7 @@ public class SubmitQrHandler implements FlowHandler {
   private final RSA rsa;
   private final UserRepository userRepository;
   private final ParkingRepository parkingRepository;
+  private final NotificationRepository notificationRepository;
 
   private String generateId(long key) {
     Calendar cal = Calendar.getInstance();
@@ -44,19 +50,29 @@ public class SubmitQrHandler implements FlowHandler {
       if (payload.validatePayload()) {
         var qrToken = payload.getQrToken();
         var qrModel = rsa.decryptQr(qrToken);
-        log.info("{}", qrModel);
         var userId = userRepository.getUserIdByPhone(qrModel.getUserPhone());
         if (qrModel.getType() == QrType.QR_CHECK_OUT) {
           var vehicles = parkingRepository.getVehicleById(qrModel.getVehicleId());
           if (vehicles.size() > 0) {
             var vehicle = vehicles.get(0);
-            log.info("{}", vehicle);
             if (Objects.equals(vehicle.getLicensePlate(), payload.getLicensePlate())) {
               var parking = new ParkingEntity()
                   .setParkingId(qrModel.getVehicleId())
                   .setStatus("exit")
                   .setFee(String.valueOf(vehicle.getFee()));
               parkingRepository.updateExit(parking);
+              var notification = new NotificationEntity()
+                  .setNotificationId(generateId(System.currentTimeMillis()))
+                  .setUserId(userId)
+                  .setType("PARKING")
+                  .setTitle("Lấy xe thành công")
+                  .setSubType("")
+                  .setExtraInfo(new ObjectMapper().writeValueAsString(
+                      new ExtraInfo()
+                          .setHaveApi(false)
+                  ));
+              notificationRepository.create(notification);
+              response.updateResponse(StatusEnum.SUCCESS.getStatusCode());
             } else {
               response.updateResponse(StatusEnum.LICENSE_NOT_MATCH.getStatusCode());
             }
@@ -67,11 +83,22 @@ public class SubmitQrHandler implements FlowHandler {
           var parking = new ParkingEntity()
               .setParkingId(generateId(System.currentTimeMillis()))
               .setUserId(userId)
-              .setLocationId("20230500000000000001") // TODO: update new location_id
+              .setLocationId(payload.getLocationId())
               .setLicensePlate(payload.getLicensePlate());
           parkingRepository.create(parking);
+          var notification = new NotificationEntity()
+              .setNotificationId(generateId(System.currentTimeMillis()))
+              .setUserId(userId)
+              .setType("PARKING")
+              .setTitle("Đỗ xe thành công")
+              .setSubType("")
+              .setExtraInfo(new ObjectMapper().writeValueAsString(
+                  new ExtraInfo()
+                      .setHaveApi(false)
+              ));
+          notificationRepository.create(notification);
+          response.updateResponse(StatusEnum.SUCCESS.getStatusCode());
         }
-        response.updateResponse(StatusEnum.SUCCESS.getStatusCode());
       } else {
         response.updateResponse(StatusEnum.INVALID_PARAMETER.getStatusCode());
       }

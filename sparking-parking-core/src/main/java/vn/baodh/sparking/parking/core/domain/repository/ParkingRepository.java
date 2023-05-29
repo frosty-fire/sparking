@@ -9,7 +9,7 @@ public interface ParkingRepository {
 
   boolean create(ParkingEntity entity) throws Exception;
 
-  boolean updateExit(ParkingEntity entity) throws Exception;
+  void updateExit(ParkingEntity entity) throws Exception;
 
   List<VehicleModel> getVehiclesByPhone(String phone) throws Exception;
 
