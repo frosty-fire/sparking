@@ -8,5 +8,5 @@ public interface NotificationRepository {
 
   boolean create(NotificationEntity entity) throws Exception;
 
-  List<NotificationModel> getNotificationByPhone(String phone) throws Exception;
+  List<NotificationModel> getNotificationByPhone(String phone, String type) throws Exception;
 }

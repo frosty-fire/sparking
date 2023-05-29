@@ -48,12 +48,14 @@ public class JdbcNotificationRepository implements NotificationRepository {
   }
 
   @Override
-  public List<NotificationModel> getNotificationByPhone(String phone) throws Exception {
+  public List<NotificationModel> getNotificationByPhone(String phone, String type)
+      throws Exception {
     var userId = userRepository.getUserIdByPhone(phone);
-    var prep = "select * from %s where user_id = :user_id";
+    var prep = "select * from %s where user_id = :user_id and type = :type";
     var sql = String.format(prep, NOTIFICATION_TABLE);
     var params = new MapSqlParameterSource();
     params.addValue("user_id", userId);
+    params.addValue("type", type);
     try {
       return jdbcTemplate.query(sql, params, (rs, i) -> {
         var entity = new NotificationEntity()

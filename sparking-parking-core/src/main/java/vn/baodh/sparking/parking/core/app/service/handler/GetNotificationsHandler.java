@@ -25,7 +25,7 @@ public class GetNotificationsHandler implements FlowHandler {
       GetNotificationPayLoad payload = new GetNotificationPayLoad().getPayLoadInfo(
           baseRequestInfo.getParams());
       if (payload.validatePayload()) {
-        response.setData(notificationRepository.getNotificationByPhone(payload.getPhone())
+        response.setData(notificationRepository.getNotificationByPhone(payload.getPhone(), payload.getType())
             .toArray(new NotificationModel[0]));
         response.updateResponse(StatusEnum.SUCCESS.getStatusCode());
       } else {

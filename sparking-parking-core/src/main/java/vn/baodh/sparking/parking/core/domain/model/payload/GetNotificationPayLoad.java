@@ -10,6 +10,7 @@ import vn.baodh.sparking.parking.core.domain.model.PayLoad;
 public class GetNotificationPayLoad implements PayLoad {
 
   private String phone;
+  private String type;
 
   private String deviceId;
   private String deviceModel;
