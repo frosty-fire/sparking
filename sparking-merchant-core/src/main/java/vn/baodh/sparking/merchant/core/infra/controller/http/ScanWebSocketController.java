@@ -1,8 +1,5 @@
 package vn.baodh.sparking.merchant.core.infra.controller.http;
 
-import java.util.Base64;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,9 +9,7 @@ import org.springframework.stereotype.Controller;
 import vn.baodh.sparking.merchant.core.app.cache.CacheManagement;
 import vn.baodh.sparking.merchant.core.domain.enumeration.ScanStatusEnum;
 import vn.baodh.sparking.merchant.core.domain.model.ScanModel;
-import vn.baodh.sparking.merchant.core.domain.repository.ParkingRepository;
-import vn.baodh.sparking.merchant.core.domain.repository.UserRepository;
-import vn.baodh.sparking.merchant.core.infra.jdbc.entity.ParkingEntity;
+import vn.baodh.sparking.merchant.core.infra.client.ParkingCoreHttpStub;
 
 @Slf4j
 @Controller
@@ -22,30 +17,12 @@ import vn.baodh.sparking.merchant.core.infra.jdbc.entity.ParkingEntity;
 public class ScanWebSocketController {
 
   private final CacheManagement cache;
-  private final UserRepository userRepository;
-  private final ParkingRepository parkingRepository;
-
-  private String generateId(long key) {
-    Calendar cal = Calendar.getInstance();
-    cal.setTime(new Date());
-    return String.format("%4d%02d%014d",
-        cal.get(Calendar.YEAR),
-        cal.get(Calendar.MONTH) + 1, key);
-  }
+  private final ParkingCoreHttpStub parkingCoreHttpStub;
 
   public void handleSubmit(ScanModel messageModel) {
     try {
       if (messageModel.getStatus().equals(ScanStatusEnum.SUCCESS.getStatus())) {
-        var phone = new String(Base64.getDecoder().decode(messageModel.getQrToken()));
-        log.info(phone);
-        var userId = userRepository.getUserIdByPhone(phone);
-        log.info(userId);
-        var parking = new ParkingEntity()
-            .setParkingId(generateId(System.currentTimeMillis()))
-            .setUserId(userId)
-            .setLocationId(generateId(1))
-            .setLicensePlate(messageModel.getLicensePlate());
-        parkingRepository.create(parking);
+        parkingCoreHttpStub.submitQrParking(messageModel);
       }
     } catch (Exception ignored) {
     }
