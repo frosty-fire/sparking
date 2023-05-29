@@ -10,13 +10,14 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Component;
 import vn.baodh.sparking.parking.core.app.security.qrtoken.RSA;
 import vn.baodh.sparking.parking.core.app.service.FlowHandler;
+import vn.baodh.sparking.parking.core.app.service.socket.QrStatusEventUpdater;
 import vn.baodh.sparking.parking.core.domain.enumeration.StatusEnum;
-import vn.baodh.sparking.parking.core.domain.model.NotificationModel;
 import vn.baodh.sparking.parking.core.domain.model.NotificationModel.ExtraInfo;
 import vn.baodh.sparking.parking.core.domain.model.QrType;
 import vn.baodh.sparking.parking.core.domain.model.base.BaseRequestInfo;
 import vn.baodh.sparking.parking.core.domain.model.base.BaseResponse;
 import vn.baodh.sparking.parking.core.domain.model.payload.QrSubmitPayload;
+import vn.baodh.sparking.parking.core.domain.model.payload.StatusPayLoad;
 import vn.baodh.sparking.parking.core.domain.repository.NotificationRepository;
 import vn.baodh.sparking.parking.core.domain.repository.ParkingRepository;
 import vn.baodh.sparking.parking.core.domain.repository.UserRepository;
@@ -32,6 +33,7 @@ public class SubmitQrHandler implements FlowHandler {
   private final UserRepository userRepository;
   private final ParkingRepository parkingRepository;
   private final NotificationRepository notificationRepository;
+  private final QrStatusEventUpdater qrStatusEventUpdater;
 
   private String generateId(long key) {
     Calendar cal = Calendar.getInstance();
@@ -39,6 +41,19 @@ public class SubmitQrHandler implements FlowHandler {
     return String.format("%4d%02d%014d",
         cal.get(Calendar.YEAR),
         cal.get(Calendar.MONTH) + 1, key);
+  }
+
+  public void sendMessageToClient(StatusPayLoad statusPayLoad) {
+    try {
+      log.info("handle");
+      if (qrStatusEventUpdater.handle(statusPayLoad)) {
+        log.info("handle success");
+      } else {
+        log.info("handle fail");
+      }
+    } catch (Exception e) {
+      log.error("fail");
+    }
   }
 
   @Override
@@ -98,6 +113,13 @@ public class SubmitQrHandler implements FlowHandler {
               ));
           notificationRepository.create(notification);
           response.updateResponse(StatusEnum.SUCCESS.getStatusCode());
+        }
+        if (qrModel.getSocketKey() != null && !qrModel.getSocketKey().isEmpty()) {
+          var statusPayload = new StatusPayLoad()
+              .setStatus(response.getReturnCode())
+              .setStatusMessage(response.getReturnMessage())
+              .setRoomId(qrModel.getSocketKey());
+          sendMessageToClient(statusPayload);
         }
       } else {
         response.updateResponse(StatusEnum.INVALID_PARAMETER.getStatusCode());

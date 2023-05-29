@@ -35,20 +35,6 @@ public class ParkingHttpController {
 
   @GetMapping("/ping")
   public ResponseEntity<?> ping(HttpServletRequest uri, @RequestParam Map<String, String> params) {
-    try {
-      log.info("handle");
-      if (qrStatusEventUpdater.handle(new StatusPayLoad()
-          .setStatus(1)
-          .setStatusMessage("Sịn vl")
-          .setRoomId(params.get("room_id"))
-      )) {
-        log.info("handle success");
-      } else {
-        log.info("handle fail");
-      }
-    } catch (Exception e) {
-      log.error("fail");
-    }
     return ResponseEntity.ok("pong");
   }
 
