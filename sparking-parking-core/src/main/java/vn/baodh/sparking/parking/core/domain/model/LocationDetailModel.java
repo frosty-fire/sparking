@@ -18,6 +18,7 @@ public class LocationDetailModel {
   private String timeEnd;
   private String description;
   private List<PriceTicket> priceTicket;
+  private String monthTicket;
 
   @Data
   @Accessors(chain = true)
@@ -35,6 +36,7 @@ public class LocationDetailModel {
 
     private String description;
     private List<PriceTicket> priceTicket;
+    private String monthTicket;
   }
 }
 

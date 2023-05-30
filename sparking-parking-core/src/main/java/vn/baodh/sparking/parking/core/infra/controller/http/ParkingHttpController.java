@@ -1,6 +1,9 @@
 package vn.baodh.sparking.parking.core.infra.controller.http;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,13 +19,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import vn.baodh.sparking.parking.core.app.mapping.FlowMapping;
 import vn.baodh.sparking.parking.core.app.service.FlowHandler;
-import vn.baodh.sparking.parking.core.app.service.socket.QrStatusEventUpdater;
 import vn.baodh.sparking.parking.core.domain.enumeration.FlowEnum;
 import vn.baodh.sparking.parking.core.domain.enumeration.StatusEnum;
+import vn.baodh.sparking.parking.core.domain.model.LocationDetailModel.ExtraInfo;
+import vn.baodh.sparking.parking.core.domain.model.LocationDetailModel.PriceTicket;
 import vn.baodh.sparking.parking.core.domain.model.base.BaseRequest;
 import vn.baodh.sparking.parking.core.domain.model.base.BaseRequestInfo;
 import vn.baodh.sparking.parking.core.domain.model.base.BaseResponse;
-import vn.baodh.sparking.parking.core.domain.model.payload.StatusPayLoad;
+import vn.baodh.sparking.parking.core.domain.repository.LocationRepository;
+import vn.baodh.sparking.parking.core.infra.jdbc.entity.LocationEntity;
 
 @Slf4j
 @RestController
@@ -31,7 +36,6 @@ import vn.baodh.sparking.parking.core.domain.model.payload.StatusPayLoad;
 public class ParkingHttpController {
 
   private final FlowMapping flowMapping;
-  private final QrStatusEventUpdater qrStatusEventUpdater;
 
   @GetMapping("/ping")
   public ResponseEntity<?> ping(HttpServletRequest uri, @RequestParam Map<String, String> params) {

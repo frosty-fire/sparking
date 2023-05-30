@@ -59,7 +59,8 @@ public class LocationEntity {
           .setTimeStart(this.getStartTime())
           .setTimeEnd(this.getEndTime())
           .setDescription(extraInfo.getDescription())
-          .setPriceTicket(extraInfo.getPriceTicket());
+          .setPriceTicket(extraInfo.getPriceTicket())
+          .setMonthTicket(extraInfo.getMonthTicket());
     } catch (Exception e) {
       log.error("json_mapper error, extraInfo", e);
     }

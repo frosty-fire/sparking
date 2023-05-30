@@ -17,7 +17,11 @@ public enum FlowEnum {
   SUBMIT_QR(6, "parking/submit-qr"),
 
   // notification
-  GET_NOTIFICATIONS(7, "notify/get-notifications")
+  GET_NOTIFICATIONS(7, "notify/get-notifications"),
+
+  // location
+  GET_LOCATIONS(8, "location/get-locations"),
+  GET_LOCATION(9, "location/get-location-detail")
   ;
 
   private final int value;
