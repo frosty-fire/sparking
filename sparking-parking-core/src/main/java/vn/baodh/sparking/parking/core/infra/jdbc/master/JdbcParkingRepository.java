@@ -67,7 +67,7 @@ public class JdbcParkingRepository implements ParkingRepository {
   @Override
   public List<VehicleModel> getVehiclesByPhone(String phone) throws Exception {
     var userId = userRepository.getUserIdByPhone(phone);
-    var prep = "select * from %s where user_id = :user_id";
+    var prep = "select * from %s where user_id = :user_id and status = 'entry'";
     var sql = String.format(prep, PARKING_TABLE);
     var params = new MapSqlParameterSource();
     params.addValue("user_id", userId);
@@ -96,12 +96,17 @@ public class JdbcParkingRepository implements ParkingRepository {
 
   @Override
   public List<VehicleDetailModel> getVehicleById(String vehicleId) throws Exception {
+    log.info(vehicleId);
     var prep = "select * from %s where parking_id = :parking_id";
     var sql = String.format(prep, PARKING_TABLE);
     var params = new MapSqlParameterSource();
     params.addValue("parking_id", vehicleId);
     try {
       return jdbcTemplate.query(sql, params, (rs, i) -> {
+        log.info(String.valueOf(rs.getTimestamp("entry_time").toLocalDateTime()));
+        log.info(String.valueOf(rs.getTimestamp("exit_time").toLocalDateTime()));
+        log.info(String.valueOf(rs.getTimestamp("created_at").toLocalDateTime()));
+        log.info(String.valueOf(rs.getTimestamp("updated_at").toLocalDateTime()));
         var entity = new ParkingEntity()
             .setParkingId(rs.getString("parking_id"))
             .setUserId(rs.getString("user_id"))

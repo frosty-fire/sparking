@@ -65,6 +65,7 @@ public class SubmitQrHandler implements FlowHandler {
       if (payload.validatePayload()) {
         var qrToken = payload.getQrToken();
         var qrModel = rsa.decryptQr(qrToken);
+        log.info("qrmodel {}", qrModel);
         var userId = userRepository.getUserIdByPhone(qrModel.getUserPhone());
         if (qrModel.getType() == QrType.QR_CHECK_OUT) {
           var vehicles = parkingRepository.getVehicleById(qrModel.getVehicleId());
@@ -85,6 +86,7 @@ public class SubmitQrHandler implements FlowHandler {
                   .setExtraInfo(new ObjectMapper().writeValueAsString(
                       new ExtraInfo()
                           .setHaveApi(false)
+                          .setDescription("Nhà xe Bách khoa Thủ Đức")
                   ));
               notificationRepository.create(notification);
               response.updateResponse(StatusEnum.SUCCESS.getStatusCode());
@@ -110,10 +112,12 @@ public class SubmitQrHandler implements FlowHandler {
               .setExtraInfo(new ObjectMapper().writeValueAsString(
                   new ExtraInfo()
                       .setHaveApi(false)
+                      .setDescription("Nhà xe Bách khoa Thủ Đức")
               ));
           notificationRepository.create(notification);
           response.updateResponse(StatusEnum.SUCCESS.getStatusCode());
         }
+        log.info("socket_key {}", qrModel.getSocketKey());
         if (qrModel.getSocketKey() != null && !qrModel.getSocketKey().isEmpty()) {
           var statusPayload = new StatusPayLoad()
               .setStatus(response.getReturnCode())

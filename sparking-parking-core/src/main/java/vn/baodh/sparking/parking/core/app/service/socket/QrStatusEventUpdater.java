@@ -37,6 +37,7 @@ public class QrStatusEventUpdater {
         status.setStatusMessage("Lỗi server không thể kết nối");
       }
       socket.emit("updateStatus", GsonUtil.toJsonString(status));
+      log.info(GsonUtil.toJsonString(status));
       socket.emit("leaveRoom", GsonUtil.toJsonString(status.getRoomId()));
     });
 

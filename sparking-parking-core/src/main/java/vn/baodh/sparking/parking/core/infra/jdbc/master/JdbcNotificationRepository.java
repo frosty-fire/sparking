@@ -1,6 +1,7 @@
 package vn.baodh.sparking.parking.core.infra.jdbc.master;
 
 import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -51,7 +52,13 @@ public class JdbcNotificationRepository implements NotificationRepository {
   public List<NotificationModel> getNotificationByPhone(String phone, String type)
       throws Exception {
     var userId = userRepository.getUserIdByPhone(phone);
-    var prep = "select * from %s where user_id = :user_id and type = :type";
+    log.info("{}.{}", userId, type);
+    var prep = "";
+    if (Objects.equals(type, "ALL")) {
+      prep = "select * from %s where user_id = :user_id";
+    } else {
+      prep = "select * from %s where user_id = :user_id and type = :type";
+    }
     var sql = String.format(prep, NOTIFICATION_TABLE);
     var params = new MapSqlParameterSource();
     params.addValue("user_id", userId);
