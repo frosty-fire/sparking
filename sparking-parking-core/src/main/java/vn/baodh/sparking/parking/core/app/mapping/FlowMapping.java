@@ -43,6 +43,8 @@ public class FlowMapping {
   private final GetLocationsHandler getLocationsHandler;
   private final GetLocationDetailHandler getLocationDetailHandler;
 
+  // month card
+
   public FlowHandler getFlowHandler(FlowEnum flowEnum) {
     return switch (flowEnum) {
       case CHECK_IN -> checkInHandler;
@@ -54,6 +56,9 @@ public class FlowMapping {
       case GET_NOTIFICATIONS -> getNotificationsHandler;
       case GET_LOCATIONS -> getLocationsHandler;
       case GET_LOCATION -> getLocationDetailHandler;
+      case SUBMIT_MONTH_CARD -> defaultHandler;
+      case UPDATE_MONTH_CARD -> defaultHandler;
+      case GET_MONTH_CARD -> defaultHandler;
       default -> defaultHandler;
     };
   }

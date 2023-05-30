@@ -15,7 +15,12 @@ import vn.baodh.sparking.parking.core.domain.model.LocationModel;
 public class MonthCardEntity {
 
   @Id
+  private String monthCardId;
   private String locationId;
+  private String useUserId;
+  private String sourceUserId;
+  private String price;
+  private String extraInfo;
   private String createdAt;
   private String updatedAt;
 

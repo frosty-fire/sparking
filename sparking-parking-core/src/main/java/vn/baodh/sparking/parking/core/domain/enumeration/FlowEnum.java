@@ -25,7 +25,8 @@ public enum FlowEnum {
 
   // month card
   SUBMIT_MONTH_CARD(10, "location/submit-month-card"),
-  GET_MONTH_CARD(11, "location/get-month-card"),
+  UPDATE_MONTH_CARD(11, "location/update-month-card"),
+  GET_MONTH_CARD(12, "location/get-month-card"),
   ;
 
   private final int value;
