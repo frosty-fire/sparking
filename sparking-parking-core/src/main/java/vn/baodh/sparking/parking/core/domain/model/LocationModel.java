@@ -6,7 +6,10 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 public class LocationModel {
+
   private String locationId;
   private String locationName;
+  private String imageUrl;
   private String address;
+  private String mapUrl;
 }

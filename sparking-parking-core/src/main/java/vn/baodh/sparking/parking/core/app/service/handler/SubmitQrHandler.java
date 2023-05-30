@@ -18,6 +18,7 @@ import vn.baodh.sparking.parking.core.domain.model.base.BaseRequestInfo;
 import vn.baodh.sparking.parking.core.domain.model.base.BaseResponse;
 import vn.baodh.sparking.parking.core.domain.model.payload.QrSubmitPayload;
 import vn.baodh.sparking.parking.core.domain.model.payload.StatusPayLoad;
+import vn.baodh.sparking.parking.core.domain.repository.LocationRepository;
 import vn.baodh.sparking.parking.core.domain.repository.NotificationRepository;
 import vn.baodh.sparking.parking.core.domain.repository.ParkingRepository;
 import vn.baodh.sparking.parking.core.domain.repository.UserRepository;
@@ -33,6 +34,7 @@ public class SubmitQrHandler implements FlowHandler {
   private final UserRepository userRepository;
   private final ParkingRepository parkingRepository;
   private final NotificationRepository notificationRepository;
+  private final LocationRepository locationRepository;
   private final QrStatusEventUpdater qrStatusEventUpdater;
 
   private String generateId(long key) {
@@ -77,6 +79,7 @@ public class SubmitQrHandler implements FlowHandler {
                   .setStatus("exit")
                   .setFee(String.valueOf(vehicle.getFee()));
               parkingRepository.updateExit(parking);
+              var locations = locationRepository.getLocationById(payload.getLocationId());
               var notification = new NotificationEntity()
                   .setNotificationId(generateId(System.currentTimeMillis()))
                   .setUserId(userId)
@@ -86,7 +89,7 @@ public class SubmitQrHandler implements FlowHandler {
                   .setExtraInfo(new ObjectMapper().writeValueAsString(
                       new ExtraInfo()
                           .setHaveApi(false)
-                          .setDescription("Nhà xe Bách khoa Thủ Đức")
+                          .setDescription(locations.get(0).getLocationName())
                   ));
               notificationRepository.create(notification);
               response.updateResponse(StatusEnum.SUCCESS.getStatusCode());
@@ -103,6 +106,7 @@ public class SubmitQrHandler implements FlowHandler {
               .setLocationId(payload.getLocationId())
               .setLicensePlate(payload.getLicensePlate());
           parkingRepository.create(parking);
+          var locations = locationRepository.getLocationById(payload.getLocationId());
           var notification = new NotificationEntity()
               .setNotificationId(generateId(System.currentTimeMillis()))
               .setUserId(userId)
@@ -112,7 +116,7 @@ public class SubmitQrHandler implements FlowHandler {
               .setExtraInfo(new ObjectMapper().writeValueAsString(
                   new ExtraInfo()
                       .setHaveApi(false)
-                      .setDescription("Nhà xe Bách khoa Thủ Đức")
+                      .setDescription(locations.get(0).getDescription())
               ));
           notificationRepository.create(notification);
           response.updateResponse(StatusEnum.SUCCESS.getStatusCode());
