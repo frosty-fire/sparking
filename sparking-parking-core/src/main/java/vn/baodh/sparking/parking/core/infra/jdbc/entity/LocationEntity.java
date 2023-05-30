@@ -58,6 +58,8 @@ public class LocationEntity {
           .setMapUrl(this.getMapUrl())
           .setTimeStart(this.getStartTime())
           .setTimeEnd(this.getEndTime())
+          .setCurrentSlot(this.getCurrentSlot())
+          .setMaxSlot(this.getMaxSlot())
           .setDescription(extraInfo.getDescription())
           .setPriceTicket(extraInfo.getPriceTicket())
           .setMonthTicket(extraInfo.getMonthTicket());

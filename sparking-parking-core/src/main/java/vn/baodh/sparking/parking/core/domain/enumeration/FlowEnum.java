@@ -21,7 +21,11 @@ public enum FlowEnum {
 
   // location
   GET_LOCATIONS(8, "location/get-locations"),
-  GET_LOCATION(9, "location/get-location-detail")
+  GET_LOCATION(9, "location/get-location-detail"),
+
+  // month card
+  SUBMIT_MONTH_CARD(10, "location/submit-month-card"),
+  GET_MONTH_CARD(11, "location/get-month-card"),
   ;
 
   private final int value;

@@ -16,6 +16,8 @@ public class LocationDetailModel {
   private String mapUrl;
   private String timeStart;
   private String timeEnd;
+  private String currentSlot;
+  private String maxSlot;
   private String description;
   private List<PriceTicket> priceTicket;
   private String monthTicket;

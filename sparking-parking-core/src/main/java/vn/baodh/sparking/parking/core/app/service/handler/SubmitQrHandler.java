@@ -116,7 +116,7 @@ public class SubmitQrHandler implements FlowHandler {
               .setExtraInfo(new ObjectMapper().writeValueAsString(
                   new ExtraInfo()
                       .setHaveApi(false)
-                      .setDescription(locations.get(0).getDescription())
+                      .setDescription(locations.get(0).getLocationName())
               ));
           notificationRepository.create(notification);
           response.updateResponse(StatusEnum.SUCCESS.getStatusCode());
