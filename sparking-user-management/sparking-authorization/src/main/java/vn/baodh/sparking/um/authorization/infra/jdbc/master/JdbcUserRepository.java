@@ -7,6 +7,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
+import vn.baodh.sparking.um.authorization.domain.model.FriendModel;
 import vn.baodh.sparking.um.authorization.domain.model.UserModel;
 import vn.baodh.sparking.um.authorization.domain.repository.UserRepository;
 import vn.baodh.sparking.um.authorization.infra.jdbc.entity.UserEntity;
@@ -90,6 +91,76 @@ public class JdbcUserRepository implements UserRepository {
             .setUpdatedAt(String.valueOf(rs.getTimestamp("updated_at").toLocalDateTime()));
         return entity.toUserModel();
       });
+    } catch (Exception exception) {
+      throw new Exception("database exception: " + exception);
+    }
+  }
+
+  @Override
+  public List<FriendModel> getFriendById(String userId, boolean isSecure) throws Exception {
+    var prep = "select * from %s where user_id = :user_id";
+    var sql = String.format(prep, USER_TABLE);
+    var params = new MapSqlParameterSource();
+    params.addValue("user_id", userId);
+    try {
+      return jdbcTemplate.query(sql, params, (rs, i) -> {
+        var entity = new UserEntity()
+            .setUserId(rs.getString("user_id"))
+            .setPhone(rs.getString("phone"))
+            .setPin(isSecure ? "***" : rs.getString("pin"))
+            .setFullName(rs.getString("full_name"))
+            .setGender(rs.getString("gender"))
+            .setBirthday(rs.getString("birthday"))
+            .setEmail(rs.getString("email"))
+            .setCic(rs.getString("cic"))
+            .setImageUrl(rs.getString(("image_url")))
+            .setAppConfig((rs.getString("app_config")))
+            .setCreatedAt(String.valueOf(rs.getTimestamp("created_at").toLocalDateTime()))
+            .setUpdatedAt(String.valueOf(rs.getTimestamp("updated_at").toLocalDateTime()));
+        return entity.toFriendModel();
+      });
+    } catch (Exception exception) {
+      throw new Exception("database exception: " + exception);
+    }
+  }
+
+  @Override
+  public List<FriendModel> getUnknownLikePhone(String phone, boolean isSecure) throws Exception {
+    var prep = "select * from %s where phone like :phone";
+    var sql = String.format(prep, USER_TABLE);
+    var params = new MapSqlParameterSource();
+    params.addValue("phone", phone + "%");
+    try {
+      return jdbcTemplate.query(sql, params, (rs, i) -> {
+        var entity = new UserEntity()
+            .setUserId(rs.getString("user_id"))
+            .setPhone(rs.getString("phone"))
+            .setPin(isSecure ? "***" : rs.getString("pin"))
+            .setFullName(rs.getString("full_name"))
+            .setGender(rs.getString("gender"))
+            .setBirthday(rs.getString("birthday"))
+            .setEmail(rs.getString("email"))
+            .setCic(rs.getString("cic"))
+            .setImageUrl(rs.getString(("image_url")))
+            .setAppConfig((rs.getString("app_config")))
+            .setCreatedAt(String.valueOf(rs.getTimestamp("created_at").toLocalDateTime()))
+            .setUpdatedAt(String.valueOf(rs.getTimestamp("updated_at").toLocalDateTime()));
+        return entity.toFriendModel();
+      });
+    } catch (Exception exception) {
+      throw new Exception("database exception: " + exception);
+    }
+  }
+
+  @Override
+  public String getUserIdByPhone(String phone) throws Exception {
+    var prep = "select user_id from %s where phone = :phone";
+    var sql = String.format(prep, USER_TABLE);
+    var params = new MapSqlParameterSource();
+    params.addValue("phone", phone);
+    try {
+      var data = jdbcTemplate.query(sql, params, (rs, i) -> rs.getString("user_id"));
+      return (data.size() > 0) ? data.get(0) : "";
     } catch (Exception exception) {
       throw new Exception("database exception: " + exception);
     }

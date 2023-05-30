@@ -18,9 +18,10 @@ public enum FlowEnum {
   SET_NEW_PASSWORD(6, "user/profile/set-new-password"),
 
   // friend
-  GET_FRIENDS(7, "user/friend/get-friends"),
-  SEND_FRIEND_REQUEST(8, "user/friend/send-friend-request"),
-  UPDATE_FRIEND_REQUEST(9, "user/friend/update-friend-request");
+  GET_UNKNOWN_USER(7, "user/friend/get-unknown"),
+  GET_FRIENDS(8, "user/friend/get-friends"),
+  SEND_FRIEND_REQUEST(9, "user/friend/send-friend-request"),
+  UPDATE_FRIEND_REQUEST(10, "user/friend/update-friend-request");
 
   private final int value;
   private final String flowName;
@@ -36,9 +37,6 @@ public enum FlowEnum {
         return flowEnum;
       }
     }
-    log.info(String.valueOf(GET_FRIENDS));
-    log.info(String.valueOf(SEND_FRIEND_REQUEST));
-    log.info(String.valueOf(UPDATE_FRIEND_REQUEST));
     return UNKNOWN;
   }
 

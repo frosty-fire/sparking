@@ -3,6 +3,7 @@ package vn.baodh.sparking.um.authorization.infra.jdbc.entity;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.springframework.data.annotation.Id;
+import vn.baodh.sparking.um.authorization.domain.model.FriendModel;
 import vn.baodh.sparking.um.authorization.domain.model.UserModel;
 
 @Data
@@ -53,5 +54,13 @@ public class UserEntity {
         .setAppConfig(this.getAppConfig())
         .setCreatedAt(this.getCreatedAt())
         .setUpdatedAt(this.getUpdatedAt());
+  }
+
+  public FriendModel toFriendModel() {
+    return new FriendModel()
+        .setUserId(this.getUserId())
+        .setPhone(this.getPhone())
+        .setFullName(this.getFullName())
+        .setImageUrl(this.getImageUrl());
   }
 }
