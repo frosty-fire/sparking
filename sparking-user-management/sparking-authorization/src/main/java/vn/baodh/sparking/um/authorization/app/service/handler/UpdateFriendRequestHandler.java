@@ -11,6 +11,7 @@ import vn.baodh.sparking.um.authorization.domain.model.base.BaseResponse;
 import vn.baodh.sparking.um.authorization.domain.model.payload.UpdateFriendsRequestPayload;
 import vn.baodh.sparking.um.authorization.infra.jdbc.entity.FriendEntity;
 import vn.baodh.sparking.um.authorization.infra.jdbc.master.JdbcFriendRepository;
+import vn.baodh.sparking.um.authorization.infra.jdbc.master.JdbcNotificationRepository;
 import vn.baodh.sparking.um.authorization.infra.jdbc.master.JdbcUserRepository;
 
 @Slf4j
@@ -20,6 +21,7 @@ public class UpdateFriendRequestHandler implements FlowHandler {
 
   private final JdbcUserRepository userRepository;
   private final JdbcFriendRepository friendRepository;
+  private final JdbcNotificationRepository notificationRepository;
 
   @Override
   public BaseResponse<?> handle(BaseRequestInfo<?> baseRequestInfo) {
@@ -32,6 +34,7 @@ public class UpdateFriendRequestHandler implements FlowHandler {
             .setFriendId(payload.getFriendId())
             .setStatus(payload.getStatus());
         friendRepository.update(friendEntity);
+        notificationRepository.delete(payload.getNotificationId());
         response.updateResponse(StatusEnum.SUCCESS.getStatusCode());
       } else {
         response.updateResponse(StatusEnum.INVALID_PARAMETER.getStatusCode());

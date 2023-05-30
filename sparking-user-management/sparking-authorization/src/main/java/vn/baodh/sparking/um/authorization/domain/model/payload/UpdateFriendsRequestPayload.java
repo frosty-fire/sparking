@@ -9,6 +9,7 @@ public class UpdateFriendsRequestPayload implements PayLoad {
 
   private String friendId;
   private String status;
+  private String notificationId;
 
   private String deviceId;
   private String deviceModel;
@@ -18,6 +19,7 @@ public class UpdateFriendsRequestPayload implements PayLoad {
     UpdateFriendsRequestPayload payload = new UpdateFriendsRequestPayload();
     payload.setFriendId((String) params.get("friend_id"));
     payload.setStatus((String) params.get("status"));
+    payload.setNotificationId((String) params.get("notification_id"));
 
     payload.setDeviceId((String) params.get("device_id"));
     payload.setDeviceModel((String) params.get("device_model"));

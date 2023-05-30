@@ -46,27 +46,28 @@ public class SendFriendRequestHandler implements FlowHandler {
           baseRequestInfo.getParams());
       if (payload.validatePayload()) {
         var userId = userRepository.getUserIdByPhone(payload.getPhone());
-        var thatUser = userRepository.getFriendById(payload.getThatUserId(), true);
+        var thisUser = userRepository.getFriendById(userId, true);
         var friendId = generateId(System.currentTimeMillis());
         var friendEntity = new FriendEntity()
             .setFriendId(friendId)
             .setThisUserId(userId)
-            .setThisUserId(payload.getThatUserId())
+            .setThatUserId(payload.getThatUserId())
             .setStatus("pending");
         friendRepository.create(friendEntity);
+        var notificationId = generateId(System.currentTimeMillis());
         var apiAccept = new ApiModel()
             .setApi("https://sparking.ngrok.app/um/user/friend/update-friend-request?friend_id="
-                + friendId + "&status=accepted")
+                + friendId + "&notification_id=" + notificationId + "&status=accepted")
             .setTitle("Chấp nhận");
         var apiReject = new ApiModel()
             .setApi("https://sparking.ngrok.app/um/user/friend/update-friend-request?friend_id="
-                + friendId + "&status=cancle")
+                + friendId + "&notification_id=" + notificationId + "&status=cancel")
             .setTitle("Từ chối");
         var notification = new NotificationEntity()
-            .setNotificationId(generateId(System.currentTimeMillis()))
+            .setNotificationId(notificationId)
             .setUserId(userId)
             .setType("REQUEST")
-            .setTitle(thatUser.get(0).getFullName() + " gửi yêu cầu kết bạn")
+            .setTitle(thisUser.get(0).getFullName() + " gửi yêu cầu kết bạn")
             .setSubType("")
             .setExtraInfo(new ObjectMapper().writeValueAsString(
                 new ExtraInfo()
