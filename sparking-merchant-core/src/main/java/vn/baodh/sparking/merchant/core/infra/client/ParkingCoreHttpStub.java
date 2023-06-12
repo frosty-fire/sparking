@@ -19,7 +19,7 @@ import vn.baodh.sparking.merchant.core.domain.model.SubmitQrRequest.Params;
 @RequiredArgsConstructor
 public class ParkingCoreHttpStub {
 
-  public void submitQrParking(ScanModel scanModel) {
+  public SubmitQrResponse submitQrParking(ScanModel scanModel) {
     try {
       log.info("[ParkingCoreHttpStub] start submit Qr to Parking Core");
 
@@ -40,9 +40,13 @@ public class ParkingCoreHttpStub {
       OkHttpClient client = new OkHttpClient();
       Call call = client.newCall(request);
       Response response = call.execute();
+      if (response.body() != null) {
+        return new ObjectMapper().readValue(response.body().string(), SubmitQrResponse.class);
+      }
       log.info("[ParkingCoreHttpStub] submit qr, request {}, response {}", request, response);
     } catch (Exception e) {
       log.error("[ParkingCoreHttpStub] call submit Qr to Parking Core >exception<", e);
     }
+    return null;
   }
 }

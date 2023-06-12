@@ -10,6 +10,7 @@ import vn.baodh.sparking.merchant.core.app.cache.CacheManagement;
 import vn.baodh.sparking.merchant.core.domain.enumeration.ScanStatusEnum;
 import vn.baodh.sparking.merchant.core.domain.model.ScanModel;
 import vn.baodh.sparking.merchant.core.infra.client.ParkingCoreHttpStub;
+import vn.baodh.sparking.merchant.core.infra.client.SubmitQrResponse;
 
 @Slf4j
 @Controller
@@ -19,13 +20,14 @@ public class ScanWebSocketController {
   private final CacheManagement cache;
   private final ParkingCoreHttpStub parkingCoreHttpStub;
 
-  public void handleSubmit(ScanModel messageModel) {
+  public SubmitQrResponse handleSubmit(ScanModel messageModel) {
     try {
       if (messageModel.getStatus().equals(ScanStatusEnum.SUCCESS.getStatus())) {
-        parkingCoreHttpStub.submitQrParking(messageModel);
+        return parkingCoreHttpStub.submitQrParking(messageModel);
       }
     } catch (Exception ignored) {
     }
+    return null;
   }
 
   @MessageMapping("license-plate")
@@ -37,8 +39,16 @@ public class ScanWebSocketController {
       message.setQrToken(scanModel.getQrToken());
       message.setLicensePlate(scanModel.getLicensePlate());
       message.setStatus(ScanStatusEnum.SUCCESS.getStatus());
-      handleSubmit(message);
-      cache.deleteQrTokenSession(scanModel.getQrToken());
+      var response = handleSubmit(message);
+      if (response == null) {
+        message.setStatus(ScanStatusEnum.FAILED.getStatus());
+        cache.deleteQrTokenSession(scanModel.getQrToken());
+      } else if (response.getReturnCode() != 1) {
+        message.setQrToken(scanModel.getQrToken());
+        message.setStatus(ScanStatusEnum.LICENSE_FAILED.getStatus());
+      } else {
+        cache.deleteQrTokenSession(scanModel.getQrToken());
+      }
     } else if (Objects.equals(scanModel.getStatus(), ScanStatusEnum.QR_ERROR.getStatus())) {
       message.setStatus(ScanStatusEnum.QR_FAILED.getStatus());
       cache.deleteQrTokenSession(scanModel.getQrToken());
