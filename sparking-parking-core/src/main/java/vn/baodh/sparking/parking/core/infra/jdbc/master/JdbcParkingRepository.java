@@ -10,6 +10,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
+import vn.baodh.sparking.parking.core.domain.model.LocationDetailModel;
 import vn.baodh.sparking.parking.core.domain.model.VehicleDetailModel;
 import vn.baodh.sparking.parking.core.domain.model.VehicleModel;
 import vn.baodh.sparking.parking.core.domain.repository.ParkingRepository;
@@ -25,6 +26,7 @@ public class JdbcParkingRepository implements ParkingRepository {
   private final NamedParameterJdbcTemplate jdbcTemplate;
   private final JdbcUserRepository userRepository;
   private final JdbcMonthCardRepository monthCardRepository;
+  private final JdbcLocationRepository locationRepository;
   private final String PARKING_TABLE = "parking";
 
   @Override
@@ -140,11 +142,20 @@ public class JdbcParkingRepository implements ParkingRepository {
                 rs.getBigDecimal("fee").toString() : "0.000")
             .setCreatedAt(String.valueOf(rs.getTimestamp("created_at").toLocalDateTime()))
             .setUpdatedAt(String.valueOf(rs.getTimestamp("updated_at").toLocalDateTime()));
+        var location = new LocationDetailModel()
+            .setLocationId("20230500000000000001")
+            .setLocationName("GigaMall")
+            .setAddress("Thủ Đức, Tp.Hồ Chí Minh");
+        try {
+          location = locationRepository.getLocationById(entity.getLocationId()).get(0);
+        } catch (Exception ignored) {
+
+        }
         var monthCards = monthCardRepository.getMonthCardByUserIdAndLocation(entity.getUserId(), entity.getLocationId());
         if (monthCards != null && monthCards.size() > 0) {
-          return entity.toVehicleDetailModel(true);
+          return entity.toVehicleDetailModel(true, location.getLocationName(), location.getAddress());
         }
-        return entity.toVehicleDetailModel(false);
+        return entity.toVehicleDetailModel(false, location.getLocationName(), location.getAddress());
 
       });
     } catch (Exception exception) {

@@ -37,7 +37,7 @@ public class ParkingEntity {
         .setLicensePlate(this.getLicensePlate());
   }
 
-  public VehicleDetailModel toVehicleDetailModel(boolean isNoFee) {
+  public VehicleDetailModel toVehicleDetailModel(boolean isNoFee, String locationName, String locationAddress) {
 
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
     LocalDateTime dateTime = LocalDateTime.parse(this.getEntryTime(), formatter);
@@ -52,9 +52,9 @@ public class ParkingEntity {
         .setVehicleId(this.getParkingId())
         .setLicensePlate(this.getLicensePlate())
         .setLocation(new LocationModel()
-            .setLocationId("20230500000000000001")
-            .setLocationName("GigaMall")
-            .setAddress("Thủ Đức, Tp.Hồ Chí Minh"))
+            .setLocationId(this.getLocationId())
+            .setLocationName(locationName)
+            .setAddress(locationAddress))
         .setEntryTime(this.getEntryTime())
         .setDuration(new DurationModel()
             .setHours(hours)
