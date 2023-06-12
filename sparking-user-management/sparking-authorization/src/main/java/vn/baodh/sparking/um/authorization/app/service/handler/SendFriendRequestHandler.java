@@ -65,7 +65,7 @@ public class SendFriendRequestHandler implements FlowHandler {
             .setTitle("Từ chối");
         var notification = new NotificationEntity()
             .setNotificationId(notificationId)
-            .setUserId(userId)
+            .setUserId(payload.getThatUserId())
             .setType("REQUEST")
             .setTitle(thisUser.get(0).getFullName() + " gửi yêu cầu kết bạn")
             .setSubType("")
