@@ -44,8 +44,13 @@ public class ScanWebSocketController {
         message.setStatus(ScanStatusEnum.FAILED.getStatus());
         cache.deleteQrTokenSession(scanModel.getQrToken());
       } else if (response.getReturnCode() != 1) {
-        message.setQrToken(scanModel.getQrToken());
-        message.setStatus(ScanStatusEnum.LICENSE_FAILED.getStatus());
+        if (cache.getQrTokenSession(scanModel.getQrToken()) >= 3) {
+          message.setStatus(ScanStatusEnum.FAILED.getStatus());
+          cache.deleteQrTokenSession(scanModel.getQrToken());
+        } else {
+          message.setQrToken(scanModel.getQrToken());
+          message.setStatus(ScanStatusEnum.LICENSE_FAILED.getStatus());
+        }
       } else {
         cache.deleteQrTokenSession(scanModel.getQrToken());
       }

@@ -9,6 +9,7 @@ public class ShortUserModel {
 
   private String name;
   private String phone;
+  private String imageUrl;
   private String birthDay;
   private String email;
 }

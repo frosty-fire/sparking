@@ -24,6 +24,7 @@ public class UserModel {
     return new ShortUserModel()
         .setName(this.getFullName())
         .setPhone(this.getPhone())
+        .setImageUrl(this.getImageUrl())
         .setBirthDay(this.getBirthday())
         .setEmail(this.getEmail());
   }

@@ -9,7 +9,9 @@ public class CacheManagement {
     private final RedisCache cache;
 
     public void initQrTokenSession(String qrToken) {
-        cache.getClient().getAtomicLong(qrToken).set(0);
+        if (!cache.getClient().getAtomicLong(qrToken).isExists()) {
+            cache.getClient().getAtomicLong(qrToken).set(0);
+        }
     }
 
     public long getQrTokenSession(String qrToken) {

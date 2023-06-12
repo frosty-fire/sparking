@@ -20,11 +20,14 @@ class LicensePlateView(ListCreateAPIView):
             print(len(params.get("image")))
             license_plate = convert_license_plate(params.get("image"))
             if license_plate:
+                print("Thông tin biển số xe convert: " + license_plate)
                 data["license-plate"] = license_plate
                 response["returnCode"] = 1
                 response["returnMessage"] = "Thành công"
                 response["data"] = data
                 return JsonResponse(response, status=status.HTTP_200_OK)
+            else:
+                print("Thông tin biển số xe convert rỗng")
         response["returnCode"] = 0
         response["returnMessage"] = "Hãy thử lại"
         response["data"] = None
