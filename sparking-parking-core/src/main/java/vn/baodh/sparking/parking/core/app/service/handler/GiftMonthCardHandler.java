@@ -55,7 +55,7 @@ public class GiftMonthCardHandler implements FlowHandler {
             .setApi("https://sparking.ngrok.app/prc/location/update-month-card?month_card_id="
                 + payload.getMonthCardId() + "&phone=" + payload.getPhone() + "&location_id="
                 + payload.getLocationId() + "&price=" + payload.getPrice()
-                + "&use_user_id=" + payload.getUseUserId() + "&notification_id=" + notificationId)
+                + "&use_user_id=" + userId + "&notification_id=" + notificationId)
             .setTitle("Từ chối");
         var notification = new NotificationEntity()
             .setNotificationId(notificationId)

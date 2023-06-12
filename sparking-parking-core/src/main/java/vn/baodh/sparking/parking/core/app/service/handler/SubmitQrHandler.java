@@ -1,5 +1,7 @@
 package vn.baodh.sparking.parking.core.app.service.handler;
 
+import static java.lang.Integer.parseInt;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Calendar;
 import java.util.Date;
@@ -97,11 +99,11 @@ public class SubmitQrHandler implements FlowHandler {
                   ));
               notificationRepository.create(notification);
               var payModel = new PayModel()
-                  .setMethod("pay-month-card")
+                  .setMethod("pay-check-out")
                   .setParams(new Params()
                       .setPhone(qrModel.getUserPhone())
                       .setLocationId(payload.getLocationId())
-                      .setPrice(String.valueOf(vehicle.getFee()))
+                      .setPrice(vehicle.getFee() + "00")
                   );
               paymentCoreHttpStub.pay(payModel);
               response.updateResponse(StatusEnum.SUCCESS.getStatusCode());

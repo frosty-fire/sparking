@@ -48,7 +48,7 @@ public class GetMonthCardHandler implements FlowHandler {
               .setLocationImageUrl(location.getImageUrl())
               .setUseUserId(monthCard.getUseUserId())
               .setSourceUserId(monthCard.getSourceUserId())
-              .setPrice(monthCard.getSourceUserId())
+              .setPrice(monthCard.getPrice())
               .setNumber(monthCard.getNumber())
               .setStartDate(monthCard.getCreatedAt());
           data.add(item);

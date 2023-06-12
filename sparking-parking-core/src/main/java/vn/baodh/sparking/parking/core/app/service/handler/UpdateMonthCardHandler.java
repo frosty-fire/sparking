@@ -1,5 +1,7 @@
 package vn.baodh.sparking.parking.core.app.service.handler;
 
+import static java.lang.Integer.parseInt;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Calendar;
 import java.util.Date;
@@ -85,7 +87,10 @@ public class UpdateMonthCardHandler implements FlowHandler {
               .setParams(new Params()
                   .setPhone(payload.getPhone())
                   .setLocationId(payload.getLocationId())
-                  .setPrice(payload.getPrice())
+                  .setPrice(
+                      parseInt(payload.getPrice().replace(".", "")) * parseInt(payload.getAdditionNumber()) / 1000
+                          + ".000"
+                  )
               );
           paymentCoreHttpStub.pay(payModel);
         }
