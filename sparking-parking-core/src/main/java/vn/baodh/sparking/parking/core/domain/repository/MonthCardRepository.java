@@ -11,4 +11,6 @@ public interface MonthCardRepository {
 
   List<MonthCardEntity> getMonthCardByPhone(String phone) throws Exception;
 
+  List<MonthCardEntity> getMonthCardByUserIdAndLocation(String userId, String locationId);
+
 }

@@ -1,6 +1,7 @@
 package vn.baodh.sparking.parking.core.infra.jdbc.master;
 
 import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -22,7 +23,8 @@ public class JdbcParkingRepository implements ParkingRepository {
 
   @Qualifier("masterNamedJdbcTemplate")
   private final NamedParameterJdbcTemplate jdbcTemplate;
-  private final UserRepository userRepository;
+  private final JdbcUserRepository userRepository;
+  private final JdbcMonthCardRepository monthCardRepository;
   private final String PARKING_TABLE = "parking";
 
   @Override
@@ -138,7 +140,12 @@ public class JdbcParkingRepository implements ParkingRepository {
                 rs.getBigDecimal("fee").toString() : "0.000")
             .setCreatedAt(String.valueOf(rs.getTimestamp("created_at").toLocalDateTime()))
             .setUpdatedAt(String.valueOf(rs.getTimestamp("updated_at").toLocalDateTime()));
-        return entity.toVehicleDetailModel();
+        var monthCards = monthCardRepository.getMonthCardByUserIdAndLocation(entity.getUserId(), entity.getLocationId());
+        if (monthCards != null && monthCards.size() > 0) {
+          return entity.toVehicleDetailModel(true);
+        }
+        return entity.toVehicleDetailModel(false);
+
       });
     } catch (Exception exception) {
       throw new Exception("database exception: " + exception);

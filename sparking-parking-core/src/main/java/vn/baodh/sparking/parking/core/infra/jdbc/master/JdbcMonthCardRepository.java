@@ -92,4 +92,29 @@ public class JdbcMonthCardRepository implements MonthCardRepository {
     }
   }
 
+  @Override
+  public List<MonthCardEntity> getMonthCardByUserIdAndLocation(String userId, String locationId) {
+    var prep = "select * from %s where use_user_id = :use_user_id and location_id = :location_id and now(3) < created_at + interval number month;";
+    var sql = String.format(prep, MONTH_CARD_TABLE);
+    var params = new MapSqlParameterSource();
+    params.addValue("use_user_id", userId);
+    params.addValue("location_id", locationId);
+
+    try {
+      return jdbcTemplate.query(sql, params, (rs, i) -> new MonthCardEntity()
+          .setMonthCardId(rs.getString("month_card_id"))
+          .setLocationId(rs.getString("location_id"))
+          .setUseUserId(rs.getString("use_user_id"))
+          .setSourceUserId(rs.getString("source_user_id"))
+          .setPrice(rs.getString("price"))
+          .setNumber(rs.getString("number"))
+          .setExtraInfo(rs.getString("extra_info"))
+          .setCreatedAt(String.valueOf(rs.getTimestamp("created_at").toLocalDateTime()))
+          .setUpdatedAt(String.valueOf(rs.getTimestamp("updated_at").toLocalDateTime())));
+    } catch (Exception exception) {
+      log.error(String.valueOf(new Exception("database exception: " + exception)));
+    }
+    return null;
+  }
+
 }

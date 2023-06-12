@@ -37,7 +37,7 @@ public class ParkingEntity {
         .setLicensePlate(this.getLicensePlate());
   }
 
-  public VehicleDetailModel toVehicleDetailModel() {
+  public VehicleDetailModel toVehicleDetailModel(boolean isNoFee) {
 
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
     LocalDateTime dateTime = LocalDateTime.parse(this.getEntryTime(), formatter);
@@ -61,6 +61,6 @@ public class ParkingEntity {
             .setMinutes(minutes)
             .setSeconds(seconds)
             .setMilliseconds(milliseconds))
-        .setFee((hours + Math.ceil((minutes + Math.ceil((double) seconds / 60)) / 60))*4);
+        .setFee(isNoFee ? 0 : (hours + Math.ceil((minutes + Math.ceil((double) seconds / 60)) / 60))*4);
   }
 }
