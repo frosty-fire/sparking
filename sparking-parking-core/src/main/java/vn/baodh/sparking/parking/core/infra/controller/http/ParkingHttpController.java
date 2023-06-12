@@ -76,6 +76,39 @@ public class ParkingHttpController {
     }
   }
 
+  @GetMapping(value = "/location/update-month-card")
+  public ResponseEntity<?> handleGetTemp(
+      HttpServletRequest uri,
+      @RequestParam Map<String, String> params) {
+    var startTime = System.currentTimeMillis();
+    BaseResponse<?> response = new BaseResponse<>();
+    try {
+      log.info(
+          "[{}] Start handleGet with request: {}, {}",
+          this.getClass().getSimpleName(), params, startTime);
+      String methodName = getMethodName(uri);
+      BaseRequestInfo<String> baseRequestInfo
+          = new BaseRequestInfo<>(methodName, params);
+      FlowEnum flowEnum = FlowEnum.getFlowEnum(methodName);
+      FlowHandler flowHandler = flowMapping.getFlowHandler(flowEnum);
+      response = flowHandler.handle(baseRequestInfo);
+      log.info(
+          "[{}][{}ms] Finish handleGet with request: {}, response: {}",
+          this.getClass().getSimpleName(),
+          System.currentTimeMillis() - startTime,
+          params, response);
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+    } catch (Exception exception) {
+      response.updateResponse(StatusEnum.EXCEPTION.getStatusCode());
+      log.error(
+          "[{}][{}ms] handleGet <exception> with request: {}, response: {}",
+          this.getClass().getSimpleName(),
+          System.currentTimeMillis() - startTime,
+          uri, response, exception);
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+  }
+
   @PostMapping(value = "/{any:^(?!socket\\.io).*$}", consumes = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<?> handlePost(
       HttpServletRequest uri,
