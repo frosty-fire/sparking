@@ -9,8 +9,17 @@ import lombok.experimental.Accessors;
 public class HistoryModel {
 
   private String historyId;
+  private String userId;
   private String type;
   private String title;
-  private Map<String, String> extraInfo;
-  private String time;
+  private ExtraInfo extraInfo;
+  private String createdAt;
+  private String updatedAt;
+
+  @Data
+  @Accessors
+  public static class ExtraInfo {
+    private String description;
+    private String price;
+  }
 }

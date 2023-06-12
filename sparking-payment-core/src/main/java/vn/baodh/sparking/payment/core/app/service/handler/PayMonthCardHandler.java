@@ -13,6 +13,7 @@ import vn.baodh.sparking.payment.core.domain.model.base.BaseRequestInfo;
 import vn.baodh.sparking.payment.core.domain.model.base.BaseResponse;
 import vn.baodh.sparking.payment.core.domain.model.payload.GetHistoriesPayload;
 import vn.baodh.sparking.payment.core.domain.model.payload.PayCheckOutPayload;
+import vn.baodh.sparking.payment.core.domain.model.payload.PayMonthCardPayload;
 import vn.baodh.sparking.payment.core.infra.jdbc.master.JdbcLocationRepository;
 import vn.baodh.sparking.payment.core.infra.jdbc.master.JdbcPaymentRepository;
 import vn.baodh.sparking.payment.core.infra.jdbc.master.JdbcUserRepository;
@@ -20,11 +21,11 @@ import vn.baodh.sparking.payment.core.infra.jdbc.master.JdbcUserRepository;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class PayCheckOutHandler implements FlowHandler {
+public class PayMonthCardHandler implements FlowHandler {
 
   private final JdbcPaymentRepository paymentRepository;
-  private final JdbcUserRepository userRepository;
   private final JdbcLocationRepository locationRepository;
+  private final JdbcUserRepository userRepository;
 
   private String generateId(long key) {
     Calendar cal = Calendar.getInstance();
@@ -38,7 +39,7 @@ public class PayCheckOutHandler implements FlowHandler {
   public BaseResponse<?> handle(BaseRequestInfo<?> baseRequestInfo) {
     BaseResponse<HistoryModel> response = new BaseResponse<>();
     try {
-      PayCheckOutPayload payload = new PayCheckOutPayload().getPayLoadInfo(
+      PayMonthCardPayload payload = new PayMonthCardPayload().getPayLoadInfo(
           baseRequestInfo.getParams());
       if (payload.validatePayload()) {
         var userId = userRepository.getUserIdByPhone(payload.getPhone());
@@ -46,8 +47,8 @@ public class PayCheckOutHandler implements FlowHandler {
         var history = new HistoryModel()
             .setHistoryId(generateId(System.currentTimeMillis()))
             .setUserId(userId)
-            .setType("parking")
-            .setTitle("Thanh toán phí gửi xe")
+            .setType("month-ticket")
+            .setTitle("Mua vé tháng")
             .setExtraInfo(new ExtraInfo()
                 .setDescription(locations.get(0).getLocationName())
                 .setPrice(payload.getPrice())
@@ -57,13 +58,13 @@ public class PayCheckOutHandler implements FlowHandler {
       } else {
         response.updateResponse(StatusEnum.INVALID_PARAMETER.getStatusCode());
       }
-      log.info("[PayCheckOutHandler] Finish handle request: {}, response: {}",
+      log.info("[GetHistoriesHandler] Finish handle request: {}, response: {}",
           baseRequestInfo, response);
       return response;
     } catch (Exception exception) {
       response.updateResponse(StatusEnum.EXCEPTION.getStatusCode());
       log.error(
-          "[PayCheckOutHandler] Handler handle >exception< with request: {}, response: {}, ",
+          "[GetHistoriesHandler] Handler handle >exception< with request: {}, response: {}, ",
           baseRequestInfo, response, exception);
       return response;
     }

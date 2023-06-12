@@ -1,4 +1,4 @@
-package vn.baodh.sparking.um.authorization.domain.model;
+package vn.baodh.sparking.payment.core.domain.model;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -19,12 +19,4 @@ public class UserModel {
   private String appConfig;
   private String createdAt;
   private String updatedAt;
-
-  public ShortUserModel toShort() {
-    return new ShortUserModel()
-        .setName(this.getFullName())
-        .setPhone(this.getPhone())
-        .setBirthDay(this.getBirthday())
-        .setEmail(this.getEmail());
-  }
 }

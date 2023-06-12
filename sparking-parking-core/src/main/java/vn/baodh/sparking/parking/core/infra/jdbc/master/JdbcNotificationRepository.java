@@ -80,4 +80,19 @@ public class JdbcNotificationRepository implements NotificationRepository {
       throw new Exception("database exception: " + exception);
     }
   }
+
+  @Override
+  public boolean delete(String id) throws Exception {
+    var prep = """
+        delete from %s where notification_id = :notification_id
+        """;
+    var params = new MapSqlParameterSource();
+    var sql = String.format(prep, NOTIFICATION_TABLE);
+    params.addValue("notification_id", id);
+    try {
+      return jdbcTemplate.update(sql, params) != 0;
+    } catch (Exception exception) {
+      throw new Exception("database exception: " + exception);
+    }
+  }
 }

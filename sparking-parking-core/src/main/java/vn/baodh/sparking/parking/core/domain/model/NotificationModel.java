@@ -26,7 +26,7 @@ public class NotificationModel {
 
   @Data
   @Accessors(chain = true)
-  static class ApiModel {
+  public static class ApiModel {
 
     private String api;
     private String title;

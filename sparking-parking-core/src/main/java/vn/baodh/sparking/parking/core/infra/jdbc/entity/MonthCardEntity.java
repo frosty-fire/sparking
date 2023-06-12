@@ -20,6 +20,7 @@ public class MonthCardEntity {
   private String useUserId;
   private String sourceUserId;
   private String price;
+  private String number;
   private String extraInfo;
   private String createdAt;
   private String updatedAt;

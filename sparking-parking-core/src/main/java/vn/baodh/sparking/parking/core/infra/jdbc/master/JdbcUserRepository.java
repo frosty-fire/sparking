@@ -84,6 +84,31 @@ public class JdbcUserRepository implements UserRepository {
   }
 
   @Override
+  public List<UserEntity> getUserById(String userId, boolean isSecure) throws Exception {
+    var prep = "select * from %s where user_id = :user_id";
+    var sql = String.format(prep, USER_TABLE);
+    var params = new MapSqlParameterSource();
+    params.addValue("user_id", userId);
+    try {
+      return jdbcTemplate.query(sql, params, (rs, i) -> new UserEntity()
+          .setUserId(rs.getString("user_id"))
+          .setPhone(rs.getString("phone"))
+          .setPin(isSecure ? "***" : rs.getString("pin"))
+          .setFullName(rs.getString("full_name"))
+          .setGender(rs.getString("gender"))
+          .setBirthday(rs.getString("birthday"))
+          .setEmail(rs.getString("email"))
+          .setCic(rs.getString("cic"))
+          .setImageUrl(rs.getString(("image_url")))
+          .setAppConfig((rs.getString("app_config")))
+          .setCreatedAt(String.valueOf(rs.getTimestamp("created_at").toLocalDateTime()))
+          .setUpdatedAt(String.valueOf(rs.getTimestamp("updated_at").toLocalDateTime())));
+    } catch (Exception exception) {
+      throw new Exception("database exception: " + exception);
+    }
+  }
+
+  @Override
   public String getUserIdByPhone(String phone) throws Exception {
     var prep = "select user_id from %s where phone = :phone";
     var sql = String.format(prep, USER_TABLE);

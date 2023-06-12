@@ -1,11 +1,18 @@
-//package vn.baodh.sparking.payment.core.domain.repository;
-//
-//import java.util.List;
-//import vn.baodh.sparking.payment.core.domain.model.UserModel;
-//
-//public interface UserRepository {
-//
-//  boolean create(UserModel entity) throws Exception;
-//  boolean update(UserModel entity) throws Exception;
-//  List<UserModel> getUserByPhone(String phone, boolean isSecure) throws Exception;
-//}
+package vn.baodh.sparking.payment.core.domain.repository;
+
+import java.util.List;
+import vn.baodh.sparking.payment.core.domain.model.UserModel;
+import vn.baodh.sparking.payment.core.infra.jdbc.entity.UserEntity;
+
+public interface UserRepository {
+
+  boolean create(UserModel entity) throws Exception;
+
+  boolean update(UserModel entity);
+
+  List<UserModel> getUserByPhone(String phone) throws Exception;
+
+  List<UserEntity> getUserById(String userId, boolean isSecure) throws Exception;
+
+  String getUserIdByPhone(String phone) throws Exception;
+}

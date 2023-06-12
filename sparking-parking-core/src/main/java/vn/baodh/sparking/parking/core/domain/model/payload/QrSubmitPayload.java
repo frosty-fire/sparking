@@ -22,6 +22,7 @@ public class QrSubmitPayload implements PayLoad {
   }
 
   public boolean validatePayload() {
-    return qrToken != null && licensePlate != null;
+    return qrToken != null && !qrToken.equals("")
+        && licensePlate != null && !licensePlate.equals("");
   }
 }

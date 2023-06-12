@@ -6,7 +6,9 @@ public enum FlowEnum {
 
   // history
   GET_HISTORIES(1, "history/get-histories"),
-  PAY_CHECK_OUT(2, "payment/pay-check-out");
+  PAY_CHECK_OUT(2, "payment/pay-check-out"),
+  PAY_MONTH_CARD(3, "payment/pay-month-card"),
+  ;
 
   private final int value;
   private final String flowName;
