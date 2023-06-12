@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import vn.baodh.sparking.merchant.core.domain.model.ScanModel;
 import vn.baodh.sparking.merchant.core.domain.model.SubmitQrRequest;
 import vn.baodh.sparking.merchant.core.domain.model.SubmitQrRequest.Params;
+import vn.baodh.sparking.merchant.core.domain.model.SubmitQrResponse;
 
 @Slf4j
 @Component

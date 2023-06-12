@@ -1,4 +1,4 @@
-package vn.baodh.sparking.merchant.core.infra.client;
+package vn.baodh.sparking.merchant.core.domain.model;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

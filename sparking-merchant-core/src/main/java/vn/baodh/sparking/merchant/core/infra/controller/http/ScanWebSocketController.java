@@ -10,7 +10,7 @@ import vn.baodh.sparking.merchant.core.app.cache.CacheManagement;
 import vn.baodh.sparking.merchant.core.domain.enumeration.ScanStatusEnum;
 import vn.baodh.sparking.merchant.core.domain.model.ScanModel;
 import vn.baodh.sparking.merchant.core.infra.client.ParkingCoreHttpStub;
-import vn.baodh.sparking.merchant.core.infra.client.SubmitQrResponse;
+import vn.baodh.sparking.merchant.core.domain.model.SubmitQrResponse;
 
 @Slf4j
 @Controller
