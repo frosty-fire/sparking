@@ -11,6 +11,8 @@ public interface ParkingRepository {
 
   void updateExit(ParkingEntity entity) throws Exception;
 
+  void updateAssign(ParkingEntity entity) throws Exception;
+
   List<VehicleModel> getVehiclesByPhone(String phone) throws Exception;
 
   List<VehicleDetailModel> getVehicleById(String vehicleId) throws Exception;

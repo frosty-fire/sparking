@@ -22,6 +22,9 @@ import vn.baodh.sparking.parking.core.domain.repository.LocationRepository;
 import vn.baodh.sparking.parking.core.domain.repository.NotificationRepository;
 import vn.baodh.sparking.parking.core.domain.repository.ParkingRepository;
 import vn.baodh.sparking.parking.core.domain.repository.UserRepository;
+import vn.baodh.sparking.parking.core.infra.client.PayModel;
+import vn.baodh.sparking.parking.core.infra.client.PayModel.Params;
+import vn.baodh.sparking.parking.core.infra.client.PaymentCoreHttpStub;
 import vn.baodh.sparking.parking.core.infra.jdbc.entity.NotificationEntity;
 import vn.baodh.sparking.parking.core.infra.jdbc.entity.ParkingEntity;
 
@@ -36,6 +39,7 @@ public class SubmitQrHandler implements FlowHandler {
   private final NotificationRepository notificationRepository;
   private final LocationRepository locationRepository;
   private final QrStatusEventUpdater qrStatusEventUpdater;
+  private final PaymentCoreHttpStub paymentCoreHttpStub;
 
   private String generateId(long key) {
     Calendar cal = Calendar.getInstance();
@@ -92,6 +96,14 @@ public class SubmitQrHandler implements FlowHandler {
                           .setDescription(locations.get(0).getLocationName())
                   ));
               notificationRepository.create(notification);
+              var payModel = new PayModel()
+                  .setMethod("pay-month-card")
+                  .setParams(new Params()
+                      .setPhone(qrModel.getUserPhone())
+                      .setLocationId(payload.getLocationId())
+                      .setPrice(String.valueOf(vehicle.getFee()))
+                  );
+              paymentCoreHttpStub.pay(payModel);
               response.updateResponse(StatusEnum.SUCCESS.getStatusCode());
             } else {
               response.updateResponse(StatusEnum.LICENSE_NOT_MATCH.getStatusCode());

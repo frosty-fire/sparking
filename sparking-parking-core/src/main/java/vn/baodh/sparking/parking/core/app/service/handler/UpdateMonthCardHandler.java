@@ -14,6 +14,9 @@ import vn.baodh.sparking.parking.core.domain.model.NotificationModel.ExtraInfo;
 import vn.baodh.sparking.parking.core.domain.model.base.BaseRequestInfo;
 import vn.baodh.sparking.parking.core.domain.model.base.BaseResponse;
 import vn.baodh.sparking.parking.core.domain.model.payload.UpdateMonthCardPayload;
+import vn.baodh.sparking.parking.core.infra.client.PayModel;
+import vn.baodh.sparking.parking.core.infra.client.PayModel.Params;
+import vn.baodh.sparking.parking.core.infra.client.PaymentCoreHttpStub;
 import vn.baodh.sparking.parking.core.infra.jdbc.entity.NotificationEntity;
 import vn.baodh.sparking.parking.core.infra.jdbc.master.JdbcMonthCardRepository;
 import vn.baodh.sparking.parking.core.infra.jdbc.master.JdbcNotificationRepository;
@@ -27,6 +30,7 @@ public class UpdateMonthCardHandler implements FlowHandler {
   private final JdbcUserRepository userRepository;
   private final JdbcMonthCardRepository monthCardRepository;
   private final JdbcNotificationRepository notificationRepository;
+  private final PaymentCoreHttpStub paymentCoreHttpStub;
 
   private String generateId(long key) {
     Calendar cal = Calendar.getInstance();
@@ -57,7 +61,7 @@ public class UpdateMonthCardHandler implements FlowHandler {
                     ? payload.getAdditionNumber() : "0"
             );
         monthCardRepository.update(monthTicket.toEntity());
-        if (payload.getNotificationId() != null && !payload.getNotificationId().equals("")) {
+        if (payload.getUseUserId() != null && !payload.getUseUserId().equals("") && payload.getNotificationId() != null && !payload.getNotificationId().equals("")) {
           notificationRepository.delete(payload.getNotificationId());
           var statusMessage = (Objects.equals(payload.getUseUserId(), userId))
               ? "Vé tháng bạn tặng không được nhận" : thatUser.get(0).getFullName() + " đã nhận vé tháng";
@@ -73,6 +77,17 @@ public class UpdateMonthCardHandler implements FlowHandler {
                       .setDescription(statusMessage)
               ));
           notificationRepository.create(notification);
+        }
+
+        if (payload.getAdditionNumber() != null && !payload.getAdditionNumber().equals("")) {
+          var payModel = new PayModel()
+              .setMethod("pay-month-card")
+              .setParams(new Params()
+                  .setPhone(payload.getPhone())
+                  .setLocationId(payload.getLocationId())
+                  .setPrice(payload.getPrice())
+              );
+          paymentCoreHttpStub.pay(payModel);
         }
         response.updateResponse(StatusEnum.SUCCESS.getStatusCode());
       } else {

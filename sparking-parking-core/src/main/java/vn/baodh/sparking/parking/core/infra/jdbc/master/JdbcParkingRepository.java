@@ -47,6 +47,23 @@ public class JdbcParkingRepository implements ParkingRepository {
   }
 
   @Override
+  public void updateAssign(ParkingEntity entity) throws Exception {
+    var prep = """
+        update %s set user_id = :user_id;
+        where parking_id = :parking_id;
+        """;
+    var params = new MapSqlParameterSource();
+    var sql = String.format(prep, PARKING_TABLE);
+    params.addValue("parking_id", entity.getParkingId());
+    params.addValue("user_id", entity.getUserId());
+    try {
+      jdbcTemplate.update(sql, params);
+    } catch (Exception exception) {
+      throw new Exception("database exception: " + exception);
+    }
+  }
+
+  @Override
   public void updateExit(ParkingEntity entity) throws Exception {
     var prep = """
         update %s set exit_time = now(3), status = :status, fee = :fee, updated_at = now(3)

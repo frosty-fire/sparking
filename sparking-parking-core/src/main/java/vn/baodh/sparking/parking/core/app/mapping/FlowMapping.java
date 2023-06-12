@@ -3,6 +3,7 @@ package vn.baodh.sparking.parking.core.app.mapping;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import vn.baodh.sparking.parking.core.app.service.FlowHandler;
+import vn.baodh.sparking.parking.core.app.service.handler.AssignParkingHandler;
 import vn.baodh.sparking.parking.core.app.service.handler.CheckInHandler;
 import vn.baodh.sparking.parking.core.app.service.handler.CheckOutHandler;
 import vn.baodh.sparking.parking.core.app.service.handler.DefaultHandler;
@@ -33,6 +34,7 @@ public class FlowMapping {
   // parking
   private final GetVehicleHandler getVehicleHandler;
   private final GetVehiclesHandler getVehiclesHandler;
+  private final AssignParkingHandler assignParkingHandler;
 
   // main
   private final SubmitQrHandler submitQrHandler;
@@ -68,6 +70,7 @@ public class FlowMapping {
       case UPDATE_MONTH_CARD -> updateMonthCardHandler;
       case GIFT_MONTH_CARD -> giftMonthCardHandler;
       case GET_MONTH_CARD -> getMonthCardHandler;
+      case ASSIGN_PARKING -> assignParkingHandler;
       default -> defaultHandler;
     };
   }

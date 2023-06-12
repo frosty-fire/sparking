@@ -28,6 +28,9 @@ public enum FlowEnum {
   UPDATE_MONTH_CARD(11, "location/update-month-card"),
   GIFT_MONTH_CARD(12, "location/gift-month-card"),
   GET_MONTH_CARD(13, "location/get-month-card"),
+
+  // assign parking
+  ASSIGN_PARKING(14, "parking/assign-parking"),
   ;
 
   private final int value;

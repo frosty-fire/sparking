@@ -14,6 +14,9 @@ import vn.baodh.sparking.parking.core.domain.model.NotificationModel.ExtraInfo;
 import vn.baodh.sparking.parking.core.domain.model.base.BaseRequestInfo;
 import vn.baodh.sparking.parking.core.domain.model.base.BaseResponse;
 import vn.baodh.sparking.parking.core.domain.model.payload.SubmitMonthCardPayload;
+import vn.baodh.sparking.parking.core.infra.client.PayModel;
+import vn.baodh.sparking.parking.core.infra.client.PayModel.Params;
+import vn.baodh.sparking.parking.core.infra.client.PaymentCoreHttpStub;
 import vn.baodh.sparking.parking.core.infra.jdbc.entity.MonthCardEntity;
 import vn.baodh.sparking.parking.core.infra.jdbc.entity.NotificationEntity;
 import vn.baodh.sparking.parking.core.infra.jdbc.master.JdbcMonthCardRepository;
@@ -28,6 +31,7 @@ public class SubmitMonthCardHandler implements FlowHandler {
   private final JdbcUserRepository userRepository;
   private final JdbcMonthCardRepository monthCardRepository;
   private final JdbcNotificationRepository notificationRepository;
+  private final PaymentCoreHttpStub paymentCoreHttpStub;
 
   private String generateId(long key) {
     Calendar cal = Calendar.getInstance();
@@ -84,6 +88,14 @@ public class SubmitMonthCardHandler implements FlowHandler {
                     .setDescription(payload.getNumber() + " tháng - " + payload.getLocationId())
             ));
         notificationRepository.create(notification);
+        var payModel = new PayModel()
+            .setMethod("pay-month-card")
+            .setParams(new Params()
+                .setPhone(payload.getPhone())
+                .setLocationId(payload.getLocationId())
+                .setPrice(payload.getPrice())
+            );
+        paymentCoreHttpStub.pay(payModel);
         response.updateResponse(StatusEnum.SUCCESS.getStatusCode());
       } else {
         response.updateResponse(StatusEnum.INVALID_PARAMETER.getStatusCode());
